@@ -1,0 +1,18 @@
+\chapter{Lista invertita compressa}
+
+\begin{problem*}
+  Prendiamo una sequenza ordinata crescente di \(n\) interi
+  \(i_1, i_2,\dots ,i_n\), come per esempio una lista invertita.
+  La rappresentazione compressa differenziale \`e la sequenza \(S\) di
+  \(|S|\) bit ottenuti concatenando
+  \(\gamma(i_1),\gamma(i_2 - i_1),\dots ,\gamma(i_{n} - i_{n-1})\), dove
+  \(\gamma(x)\) rappresenta il gamma code di Elias per la codifica
+  dell'intero \(x\ge 1\) in \(2\lfloor\log_{2}{x}\rfloor + 1\) bit.
+  Mostrare come aggiungere un'opportuna directory di spazio \(O(|S|)\) bit
+  (meglio ancora, di \(o(|S|)\) bit) per poter accedere velocemente, dato
+  \(j\in [2\dots n]\), alla codifica \(\gamma(i_{j} - i_{j-1})\).
+  Estendere tale approccio per accedere velocemente a \(i_j\) (e quindi
+  poter eseguire una ricerca binaria sugli interi della lista invertita
+  compressa).
+\end{problem*}
+
