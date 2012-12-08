@@ -3,6 +3,6 @@
 
 # Except these files
 !.gitignore
+!README.mdown
 !*.tex
 !*.pdf
-
