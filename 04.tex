@@ -1,0 +1,207 @@
+\chapter{Multi-selezione in memoria esterna}    
+
+\begin{problem*}
+    Scrivere tutti i passaggi dell'analisi del costo e della correttezza
+    dell'algoritmo di multi-selezione visto a lezione.
+\end{problem*}
+
+Vogliamo esibire un algoritmo che selezioni un certo numero di pivot da un
+insieme \(S\) di cardinalit\`a \(N\) in modo tale che la distanza fra pivot
+consecutivi sia piccola. Il nostro scopo sar\`a usare questo algoritmo per
+costruire un analogo del \quicksort in memoria esterna, cos\`i come la \(k\)
+-way merge ci ha permesso di costruire l'algoritmo di \mergesort in 
+memoria esterna.
+
+Ci potremmo aspettare di dover trovare \(m\) pivot, in analogia a quanto
+facciamo per la Merge. In realt\`a \`e sufficiente determinarne \(\sqrt{m}\).
+Diamo di seguito l'algoritmo e due lemmi. Nel primo dimostreremo il costo
+lineare, nel secondo la correttezza dell'algoritmo.
+
+\begin{algorithm}
+    \caption{Multi-selezione in memoria esterna}
+    \begin{algorithmic}[1]
+        \STATE Carico e ordino in memoria principale \(\frac{N}{M}\) run
+        di \(M\) elementi ciascuno.
+        \STATE Da ogni run seleziono un elemento ogni 
+        \(\frac{\sqrt{m}}{4}\) e chiamo \(G\) (elementi verdi) l'insieme 
+        degli elementi selezionati.
+        \STATE Uso l'algoritmo dei cinque autori \(\sqrt{m}\) volte per
+        selezionare in \(G\) un elemento ogni \(\frac{4N}{m}\) e chiamo 
+        \(R\) (elementi rossi) l'insieme degli elementi selezionati.
+        \STATE Ritorno \(R\).
+    \end{algorithmic}
+\end{algorithm}
+
+\begin{lemma}[Costo]
+    L'algoritmo compie \(O(n)\) I/O.
+\end{lemma}
+\begin{proof*}
+    La prima riga dell'algoritmo comporta soltanto di scandire tutti gli
+    elementi: l'ordinamento di ogni run viene infatti svolto in memoria
+    principale, e non comporta ulteriori I/O. Anche la seconda riga
+    consiste in una scansione di tutti gli elementi. Per stimare il numero
+    di I/O della terza riga sfruttiamo invece il fatto che ogni esecuzione
+    dell'algoritmo dei cinque autori comporta una scansione di tutti gli
+    elementi. Abbiamo dunque \(\sqrt{m}\) scansioni di \(|G|\) elementi,
+    perci\`o:
+    \[
+        \sqrt{m}\cdot O\left(\frac{|G|}{B}\right) = \sqrt{m}\cdot O\left(\frac{4N}{B\sqrt{m}}\right) = O\left(\frac{4N}{B}\right) = O(n)\mbox{,}
+    \]
+    dove la prima eguaglianza discende dal fatto che, avendo selezionato
+    un elemento ogni \(\frac{\sqrt{m}}{4}\), la cardinalit\`a di \(G\) \`e
+    \(\frac{4N}{\sqrt{m}}\). Ogni riga contribuisce quindi \(O(n)\) I/O, da cui la tesi.
+\end{proof*}
+
+\begin{lemma}[Correttezza]
+    Il numero di elementi di \(S\) compresi fra due elementi di \(R\) \`e
+    minore di \(\frac{3}{2}\frac{N}{\sqrt{m}}\).
+\end{lemma}
+\begin{proof*}
+    Vogliamo dunque stimare il numero di elementi di \(S\) compresi fra
+    due generici elementi rossi \(r_1\) e \(r_2\). Possiamo dividerli in
+    tre categorie:
+    \begin{itemize}
+        \item Gli elementi \emph{verdi} compresi fra i due elementi rossi \(r_1\) e \(r_2\).
+        \item Gli elementi \emph{senza colore} compresi fra due elementi verdi.
+        \item Gli elementi \emph{senza colore} compresi fra un rosso e un verde.
+    \end{itemize}
+        
+    I primi sono facilmente maggiorati da \(X = \frac{4N}{m}\): nella 
+    terza riga dell'algoritmo abbiamo infatti scelto un rosso ogni 
+    \(\frac{4N}{m}\) elementi verdi.
+        
+    I secondi sono invece maggiorati da \(Y = \frac{N}{\sqrt{m}} - \frac{4N}{m}\). Per la seconda riga dell'algoritmo abbiamo infatti 
+    \(\frac{\sqrt{m}}{4}-1\) elementi senza colore fra due verdi
+    consecutivi appartenenti allo stesso run, avendo scelto un verde ogni
+    \(\frac{\sqrt{m}}{4}\) elementi. Per la terza riga abbiamo al pi\`u
+    \(\frac{4N}{m}\) elementi verdi fra \(r_1\) e \(r_2\), dunque al
+    pi\`u \(\frac{4N}{m}\) coppie di elementi verdi consecutivi nello
+    stesso run. Ma allora il numero cercato \`e stimato dal prodotto, e 
+    quindi da:
+    \[
+        \frac{4N}{m}\left(\frac{\sqrt{m}}{4}-1\right) = \frac{N}{\sqrt{m}} - \frac{4N}{m}\mbox{.}
+    \]
+        
+    I terzi sono invece maggiorati da \(Z = \frac{n}{2\sqrt{m}} - \frac{2n}{m}\). Per vedere questo abbiamo bisogno della figura.
+    \begin{figure}
+        \centering
+        \begin{tikzpicture}
+            \node (l_boundary_down) at (3, -0.5) [] {};
+            \node (l_boundary_up) at (3, 4.5) [] {};
+            \draw (l_boundary_down) -- (l_boundary_up) [thick];
+                
+            \node (r_boundary_down) at (8, -0.5) [] {};
+            \node (r_boundary_up) at (8, 4.5) [] {};
+            \draw (r_boundary_down) -- (r_boundary_up) [thick];
+                
+            \fill [fill=yellow!50] (3, -0.5) -- (3, 4.5) -- (4.25, 4.5) -- (4.25, -0.5) -- cycle;             
+            \fill [fill=yellow!50] (8, -0.5) -- (8, 4.5) -- (6.75, 4.5) -- (6.75, -0.5) -- cycle;
+                
+            \node (run_1_begin) at (0,0) [] {};
+            \node (run_1_end) at (10,0) [] {};
+                
+            \draw (run_1_begin) -- (run_1_end) [];
+            \node (el_1_1) at (1,0) [green_el] {};
+            \node (el_1_2) at (1.5,0) [el] {};
+            \node (el_1_3) at (2.5,0) [el] {};
+            \node (el_1_4) at (4,0) [green_el] {};
+            \node (el_1_5) at (5.5,0) [el] {};
+            \node (el_1_6) at (7.5,0) [el] {};
+            \node (el_1_7) at (8.5,0) [green_el] {};
+            \node (el_1_8) at (9,0) [el] {};
+            \node (el_1_9) at (9.5,0) [el] {};
+                
+            \node (run_2_begin) at (0,1) [] {};
+            \node (run_2_end) at (10,1) [] {};
+                
+            \draw (run_2_begin) -- (run_2_end) [];
+            \node (el_2_1) at (0.5,1) [green_el] {};
+            \node (el_2_2) at (1,1) [el] {};
+            \node (el_2_3) at (2.5,1) [el] {};
+            \node (r_1) at (3,1) [red_el] {};
+            \node (el_2_5) at (3.5,1) [el] {};
+            \node (el_2_6) at (4,1) [el] {};
+            \node (el_2_7) at (7.5,1) [green_el] {};
+            \node (el_2_8) at (8.5,1) [el] {};
+            \node (el_2_9) at (9,1) [el] {};
+                
+            \node (run_3_begin) at (0,2) [] {};
+            \node (run_3_end) at (10,2) [] {};
+                
+            \draw (run_3_begin) -- (run_3_end) [];
+            \node (el_3_1) at (0.5,2) [green_el] {};
+            \node (el_3_2) at (1.5,2) [el] {};
+            \node (el_3_3) at (2,2) [el] {};
+            \node (el_3_4) at (3.5,2) [green_el] {};
+            \node (el_3_5) at (5,2) [el] {};
+            \node (el_3_6) at (5.5,2) [el] {};
+            \node (el_3_7) at (7.5,2) [green_el] {};
+            \node (el_3_8) at (9,2) [el] {};
+            \node (el_3_9) at (9.5,2) [el] {};
+                
+            \node (run_4_begin) at (0,3) [] {};
+            \node (run_4_end) at (10,3) [] {};
+                
+            \draw (run_4_begin) -- (run_4_end) [];
+            \node (el_4_1) at (1,3) [green_el] {};
+            \node (el_4_2) at (1.5,3) [el] {};
+            \node (el_4_3) at (2.5,3) [el] {};
+            \node (el_4_4) at (4.5,3) [green_el] {};
+            \node (el_4_5) at (7,3) [el] {};
+            \node (el_4_6) at (7.5,3) [el] {};
+            \node (r_2) at (8,3) [red_el] {};
+            \node (el_4_8) at (8.5,3) [el] {};
+            \node (el_4_9) at (9.5,3) [el] {};
+                
+            \node (run_5_begin) at (0,4) [] {};
+            \node (run_5_end) at (10,4) [] {};
+                
+            \draw (run_5_begin) -- (run_5_end) [];
+            \node (el_5_1) at (1.5,4) [green_el] {};
+            \node (el_5_2) at (2,4) [el] {};
+            \node (el_5_3) at (2.5,4) [el] {};
+            \node (el_5_4) at (4,4) [green_el] {};
+            \node (el_5_5) at (4.5,4) [el] {};
+            \node (el_5_6) at (6.5,4) [el] {};
+            \node (el_5_7) at (7,4) [green_el] {};
+            \node (el_5_8) at (7.5,4) [el] {};
+            \node (el_5_9) at (9,4) [el] {};
+        \end{tikzpicture}
+        \caption{Ogni riga orizzontale rappresenta un run ordinato, e i 
+        cerchietti gli elementi di ogni run. Cerchietti rossi e verdi 
+        rappresentano rispettivamente gli elementi di \(R\) e \(G\), 
+        cerchietti neri i restanti elementi senza colore. Sono inoltre 
+        raffigurati in giallo i bordi definiti dalla posizione degli 
+        elementi rossi nei quali possiamo avere elementi senza colore 
+        compresi fra un rosso e un verde.}
+    \end{figure}
+    Osserviamo infatti che la posizione dei due elementi rossi definisce
+    un paio di ``bordi'' (raffigurati in giallo in figura) in cui \`e
+    possibile trovare gli elementi del terzo tipo. Ognuno di questi 
+    bordi può contenere al pi\`u \(\frac{\sqrt{m}}{4}-1\) elementi,
+    perché se ne contenesse di pi\`u conterrebbe sicuramente due verdi,
+    quindi elementi compresi fra due verdi. Per ognuno degli 
+    \(\frac{N}{M}\) run abbiamo insomma \(2\) bordi contenenti al pi\`u 
+    \(\frac{\sqrt{m}}{4}-1\) elementi, perci\`o possiamo stimare il
+    numero di elementi del terzo tipo con il loro prodotto, cio\`e:
+    \[
+        2 \cdot \frac{n}{m} \cdot \left( \frac{\sqrt{m}}{4}-1 \right) = \frac{n}{2\sqrt{m}} - \frac{2n}{m}\mbox{,}
+    \]
+    dove abbiamo usato che \(\frac{N}{M}\) = \(\frac{n}{m}\) essendo
+    \(n = \frac{N}{B}\) e \(m = \frac{M}{B}\).
+        
+    Di conseguenza il numero totale degli elementi compresi fra \(r_1\) 
+    e \(r_2\) è maggiorato da:
+    \begin{align}
+        X + Y + Z &= \frac{4N}{m} + \frac{N}{\sqrt{m}} - \frac{4N}{m} + \frac{n}{2\sqrt{m}} - \frac{2n}{m} \nonumber \\
+        &\le \frac{N}{\sqrt{m}} + \frac{n}{2\sqrt{m}} \nonumber
+    \end{align}
+    nella quale abbiamo cancellato i termini uguali di segno opposto e un
+    termine negativo, ottenendo un'ulteriore maggiorazione. Abbiamo
+    inoltre:
+    \begin{align}
+        \frac{N}{\sqrt{m}} + \frac{n}{2\sqrt{m}} &\le \frac{N}{\sqrt{m}} + \frac{N}{2\sqrt{m}} \nonumber \\
+        &= \frac{3}{2}\frac{N}{\sqrt{m}} \nonumber
+    \end{align}
+    essendo \(n = \frac{N}{B}\), da cui la tesi.
+\end{proof*}

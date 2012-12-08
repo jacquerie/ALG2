@@ -1,0 +1,65 @@
+\documentclass[a4paper, 12pt]{book}
+
+\usepackage[italian]{babel}
+\usepackage[utf8]{inputenc}
+
+% Chapters are now called problems.
+\addto\captionsitalian{
+    \renewcommand\chaptername{Problema}}
+
+\usepackage{epigraph}
+\usepackage{fullpage}
+
+\usepackage{amsmath}
+\usepackage{amsthm}
+
+\usepackage{tikz}
+
+% Styles used in a drawing in 04.tex
+\tikzstyle{el}=[circle,draw=black!100,fill]
+\tikzstyle{red_el}=[circle,draw=red!100,fill=red!100]
+\tikzstyle{green_el}=[circle,draw=green!100,fill=green!100]
+
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
+% Hacks needed to get the algorithm package to work.
+\renewcommand{\algorithmiccomment}[1]{/\(\!\)/ #1}
+\floatname{algorithm}{Algoritmo}
+
+\theoremstyle{plain}
+\newtheorem{problem}{Problema}
+\newtheorem*{problem*}{Problema}
+\newtheorem{lemma}{Lemma}
+\newtheorem*{proof*}{Dimostrazione}
+
+\newcommand{\quicksort}{\mbox{\sc Quicksort }}
+\newcommand{\mergesort}{\mbox{\sc Merge Sort }}
+
+\begin{document}
+    \title{Problemi di Algoritmica 2}
+    \author{Jacopo Notarstefano}
+    
+    \maketitle
+
+    \input{quote.tex}
+    \input{01.tex}
+    \input{02.tex}
+    \input{03.tex}
+    \input{04.tex}
+    % \input{05.tex}
+    % \input{06.tex}
+    % \input{07.tex}
+    % \input{08.tex}
+    % \input{09.tex}
+    % \input{10.tex}
+    % \input{11.tex}
+    % \input{12.tex}
+    % \input{13.tex}
+    % \input{14.tex}
+    % \input{15.tex}
+    % \input{16.tex}
+    % \input{17.tex}
+    % \input{18.tex}
+    % \input{19.tex}
+\end{document}
