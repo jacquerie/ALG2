@@ -5,3 +5,116 @@
     i contatori con valori arbitrari.
 \end{problem*}
 
+Vogliamo dimostrare che vale
+
+\[
+    Pr\left[F[i] - 3\varepsilon\vectornorm{F} \le \tilde{F}[i]
+        \le F[i] + 3\varepsilon\vectornorm{F}\right] \ge 1 - \delta^{\frac{1}{4}}
+\]
+
+Con $\tilde{F}[i] = median_{\substack{j}}\{T[j, h_j(i)]\}$.
+
+\begin{proof*}
+    Osserviamo innanzi tutto che $\tilde{F}[i] = T[\hat{i}, h_{\hat{i}}(i)]$
+    per qualche $\hat{i}$, e vale
+    \[
+        \tilde{F}[i] = F[i] + \sum_{k = 1}^{n}I_{\hat{i}, i, k}F[k]
+    \]
+    dove $I_{j, i, k}$ è la variabile indicatrice così definita:
+    \[
+        I_{j, i, k} =
+        \begin{cases}
+            1 & \mbox{se } i \neq k \land h_j(i)=h_j(k) \\
+            0 & \mbox{altrimenti}
+        \end{cases}
+    \]
+
+    Ponendo $X_{j, i} = \sum_{k=1}^n I_{j, i, k} F[k]$ abbiamo:
+    
+    \begin{align}
+        & Pr\left[F[i] - 3\varepsilon\vectornorm{F} \le \tilde{F}[i]
+            \le F[i] + 3\varepsilon\vectornorm{F}\right] \nonumber \\
+        &= Pr\left[F[i] - 3\varepsilon\vectornorm{F}
+            \le F[i] + \sum_{k = 1}^{n}I_{\hat{i}, i, k}F[k]
+            \le F[i] + 3\varepsilon\vectornorm{F}\right] \nonumber \\
+        &= Pr\left[F[i] - 3\varepsilon\vectornorm{F}
+            \le F[i] + X_{\hat{i},i}
+            \le F[i] + 3\varepsilon\vectornorm{F}\right] \nonumber \\
+        &= Pr\left[- 3\varepsilon\vectornorm{F}
+            \le X_{\hat{i},i}
+            \le 3\varepsilon\vectornorm{F}\right] \nonumber \\
+        &= Pr\left[|X_{\hat{i},i}| \le 3\varepsilon\vectornorm{F}\right] \nonumber
+    \end{align}
+
+    \begin{align}
+        E[I_{j, i, k}] &= Pr\left[i \neq k \land h_j(i) = h_j(k)\right] \nonumber \\
+        &= Pr\left[\cup_{a=1}^c i \neq k \land h_j(i) = a \land h_j(k) = a \right] \nonumber \\
+        &= \sum_{a=1}^c Pr\left[i \neq k \land h_j(i) = a \land h_j(k) = a \right] \nonumber \\
+        &= \sum_{a=1}^c Pr\left[h_j(i) = a\right]Pr\left[i \neq k \land h_j(k) = a \right] \nonumber \\
+        &= \frac{c}{c^2} = \frac{1}{c} = \frac{\varepsilon}{e} \nonumber
+    \end{align}
+
+    da cui
+    \begin{align}
+        E[|X_{j, i}|] &= E[|\sum_{k=1}^n I_{j, i, k} F[k]|] \nonumber \\
+        &\le \sum_{k=1}^n E[|I_{j, i, k}|] |F[k]| \nonumber \\
+        &= \frac{\varepsilon}{e} \sum_{k=1}^n |F[k]| \nonumber \\
+        &= \frac{\varepsilon}{e} \vectornorm{F} \nonumber
+    \end{align}
+
+    e quindi per ogni $j$, usando la disuguaglianza di Markov
+    \[
+        Pr\left[|X_{j, i}| \ge 3\varepsilon\vectornorm{F}\right] \le
+            \frac{E[|X_{j,i}|]}{3\varepsilon\vectornorm{F}} 
+        = \frac{\frac{\varepsilon}{e} \vectornorm{F}}{3\varepsilon\vectornorm{F}}
+        = \frac{1}{3e} < \frac{1}{8} \nonumber
+    \]
+
+    Notiamo che perché valga $|X_{\hat{i}, i}| \ge 3\varepsilon\vectornorm{F}$,
+    deve valere $|X_{j, i}| \ge 3\varepsilon\vectornorm{F}$, per questo scopo
+    introduciamo le seguenti variabili casuali:
+
+    \[
+        Y_j = 
+        \begin{cases}
+            1 & \mbox{se } |X_{j, i}| \ge 3\varepsilon\vectornorm{F} \\
+            0 & \mbox{altrimenti}
+        \end{cases}
+    \]
+
+    Se poniamo $p = E[Y_j] = Pr[|X_{j,i}| \ge 3 \varepsilon\vectornorm{F}|]$,
+    e $Y = Y_1 + \dots + Y_r$, abbiamo $E[Y] = rp$. \\
+    Noi vogliamo $Y = > \frac{r}{2}$, per calcolarne la probabilità dobbiamo
+    introdurre la disuguaglianza di Chernoff.
+
+    \begin{definition*}[Chernoff bound]
+        Se $X_1, \dots, X_n$ sono n prove di Poisson indipendenti, identicamente
+        distribuite, ossia $\forall i. P[X_i = 1] = p, P[X_i = 0] = 1-p$, se
+        prendiamo $X=\sum_{i=1}^n X_i$ e $\mu = E[X]$, per ogni $\lambda > 0$ si ha:
+        \[ Pr\left[X \ge (1+\lambda)\mu\right] <
+            \left(\frac{e^\lambda}{(1+\lambda)^{1+\lambda}}\right)^\mu\]
+    \end{definition*}
+
+    Quindi ponendo $\mu = E[Y] = rp$, $(1+\lambda)\mu = \frac{r}{2} \Rightarrow
+    1+\lambda = \frac{1}{2p}$, abbiamo
+    \begin{align}
+        Pr[Y > \frac{r}{2}] &< \left(\frac{e^\lambda}{(1+\lambda)^{1+\lambda}}\right)^\mu \nonumber\\
+        &= \frac{1}{e^\mu}\left(\frac{e}{1+\lambda}\right)^{(1+\lambda)\mu} \nonumber \\
+        &= \frac{1}{e^{rp}}\left(\frac{e}{\frac{1}{2p}}\right)^{\frac{r}{2}} \nonumber \\
+        &= \frac{1}{e^{rp}}(2pe)^{\frac{r}{2}} \nonumber
+    \end{align}
+
+    Quindi se $\frac{1}{e^{rp}}(2pe)^{\frac{r}{2}} \le \frac{1}{2^{\frac{r}{2}}} (= \delta^{\frac{1}{4}})$
+    abbiamo concluso:
+
+    \begin{align}
+        \frac{1}{e^{rp}}(2pe)^{\frac{r}{2}} &\le \frac{1}{2^{\frac{r}{2}}} \nonumber \\
+        2^{\frac{r}{4}} &\le e^{rp} \frac{1}{(2pe)^{\frac{r}{2}}} \nonumber \\
+        & \{e^{rp} \ge 1 \mbox{, quindi è sufficiente mostrare quanto sotto}\} \nonumber \\
+        2^{\frac{r}{4}} &\le \frac{1}{(2pe)^{\frac{r}{2}}} \nonumber \\
+        2^{\frac{1}{2}} &\le \frac{1}{2pe} \nonumber \\
+        p &\le \frac{1}{2\sqrt{2}e} \nonumber
+    \end{align}
+
+    che vale in quanto $2\sqrt{2}e\sim 7.668$ e $p < \frac{1}{8}$. \qed
+\end{proof*}
