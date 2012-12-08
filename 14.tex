@@ -1,0 +1,135 @@
+\chapter {Cuckoo hashing}
+
+\begin{problem*}
+    Scrivere tutti i passaggi dell'analisi del costo dell'inserimento
+    di un elemento in una tabella di cuckoo hashing. Discutere anche
+    della cancellazione e della sua complessità.
+\end{problem*}
+
+Dobbiamo fare hashing da un insieme di $n$ elementi ad un insieme di $r$
+elementi. Invece di procedere nel modo classico usando le liste di adiacenza
+(che nel caso pessimo potrebbero contenere tutti gli elementi), vogliamo un
+modo che ci permetta di avere esattamente un elemento in associato ad ognuno
+degli $r$ valori (quindi che sia possibile salvare gli $n$ elementi su un array
+di dimensione $r$).
+Per farlo, ci avvaliamo di due funzioni hash, 2-wise indipendenti, $h_1(x)$ e
+$h_2(x)$, in questo modo:
+
+\begin{algorithm}
+    \caption{Inserimento in Cuckoo hashing}
+    \begin{algorithmic}[1]
+        \STATE provo ad inserire x in $h_1(x)$
+        \STATE se la cella è libera lo inserisco semplicemente
+        \STATE se la cella non è libera tolgo l'elemento y dalla cella $h_1(x)$
+        e ripeto il procedimento per y, provando a inserirlo in $h_1(y)$ se
+        $h_1(x) = h_2(y)$ o in $h_2(y)$ se $h_1(x) = h_1(y)$, per un massimo di
+        $n$ volte.
+        \STATE se il valore non è stato ancora inserito si cambiano le funzioni
+        di hashing, e si riprova ad inserire il valore che si stava cercando di
+        inserire alla $n$-esima iterazione.
+    \end{algorithmic}
+\end{algorithm}
+
+Si nota, come vedremo, che il numero di iterazioni massimo nel punto 3 serve
+per evitare di andare in loop quando si tenta di inserire un valore.
+
+Per fare l'analisi è necessario introdurre i concetti di grafo Cuckoo e di
+bucket, più un lemma:
+
+\begin{definition*}[Grafo Cuckoo]
+    Il grafo Cuckoo è un grafo che ha per nodi le celle dell'array, con un arco
+    uscente in ogni cella contenente un valore, che punta alla cella alternativa
+    secondo le funzioni $h_1(x)$, $h_2(x)$. Ovvero, se il nodo $i$ contiene il
+    valore $x$, $i$ avrà un arco uscente verso $h_2(x)$ se $i = h_1(x)$ o
+    viceversa un arco verso $h_1(x)$ se $i = h_2(x)$.
+\end{definition*}
+
+\begin{definition*}[Bucket]
+    Si dice \emph{bucket} di un valore $x$ l'insieme dei nodi raggiungibili dai
+    nodi $\left\{h_1(x), h_2(x)\right\}$ nel grafo Cuckoo. Ossia tutti i nodi
+    con cui potremmo avere a che fare nel caso volessimo inserire $x$.
+\end{definition*}
+
+\begin{lemma}
+    Per ogni nodo $i$ e $j$, e ogni $c > 1$, se $r \ge 2cn$, la probabilità che
+    esista un cammino tra $i$ e $j$ di lunghezza $l$ è al più $\frac{c^{-l}}{r}
+    = \frac{1}{c^lr}$. Ovvero, se il numero di celle nell'array è
+    sufficientemente più grande del numero di valori salvati, la probabilità
+    che esista un cammino di lunghezza $l$ tra due nodi è $O(\frac{1}{r})$, e
+    decresce esponenzialmente.
+\end{lemma}
+
+\begin{proof*}
+    Procediamo per induzione sulla lunghezza del percorso:
+    \begin{itemize}
+    \item per $l = 1$: un percorso di lunghezza 1 tra due nodi $i$ e $j$ esiste
+    sse per qualche $x$ $h_1(x) = i \land h_2(x) = j$ oppure $h_1(x) = j \land
+    h_2(x) = i$, si ha:
+    
+    \begin{align}
+        &Pr\left[(h_1(x) = i \land h_2(x) = j) \lor (h_1(x) = i \land h_2(x) = j) \right] = \nonumber \\
+        &= Pr\left[h_1(x) = i \land h_2(x) = j\right] + Pr\left[h_1(x) = j \land h_2(x) = i\right] = \nonumber \\
+        &= 2 Pr\left[h_1(x) = i\right]Pr\left[h_2(x) = j\right] = \nonumber \\
+        &= 2 \frac{1}{r} \frac{1}{r} = \frac{2}{r^2} \nonumber
+    \end{align}
+
+    Siccome il numero di elementi per cui vale la proprietà vista sopra è al
+    più n, si ha:
+
+    \begin{align}
+        & Pr\left[\exists \mbox{percorso di lunghezza 1 tra $i$ e $j$}\right] \nonumber \\
+        &\le n \frac{2}{r^2} = \frac{2n}{r} \frac{1}{r} \nonumber \\
+        &\left\{r \ge 2cn \mbox{ per ipotesi} \Rightarrow c \le \frac{r}{2n}
+            \Rightarrow \frac{1}{c} \ge \frac{2n}{r} \right\} \nonumber \\
+        &\le \frac {1}{cr} = \frac{c^{-1}}{r} \nonumber
+    \end{align}
+
+    \item per $l > 1$ è necessario che:
+        \begin{enumerate}
+            \item Esista un percorso ottimo lungo $l-1$ da $i$ a $k$.
+            \item Esista un arco tra $k$ e $j$.
+        \end{enumerate}
+        Abbiamo
+            \[Pr[(1)] = \frac{c^{1-l}}{r}\]
+        per ipotesi induttiva. Inoltre, usando lo stesso ragionamento di prima
+        otteniamo che
+            \[Pr[(2)]= \frac{c^{-1}}{r}.\]
+
+        Notiamo che i valori possibili di k sono $r$ e che quindi la probabilità
+        totale è data da:
+        \[r Pr[(1)]Pr[(2)] = r\frac{c^{-l}}{r^2} = \frac{c^{-l}}{r}\] \qed
+    \end{itemize}
+\end{proof*}
+
+La probabilità che al punto 3 dell'inserimento avvenga un reashing, è maggiorata
+dalla probabilità che per qualche elemento esista un ciclo. Se notiamo che
+\emph{esiste un ciclo di lunghezza $l$}$\Leftrightarrow$\emph{esiste un percorso di
+lunghezza $l$ tra $i$ e $i$ } otteniamo:
+\begin{align}
+    &Pr\left[\exists \mbox{un ciclo per il nodo i nel grafo Cuckoo}\right] \nonumber \\
+    &= \sum_{l=1}^{\infty} Pr\left[\exists \mbox{ciclo di lunghezza $l$ nel grafo Cuckoo}\right] \nonumber \\
+    &= \sum_{l=1}^{\infty} Pr\left[\exists \mbox{percorso di lunghezza $l$ tra $i$ e $i$}\right] \nonumber \\
+    &\le \sum_{l=1}^{\infty} \frac{c^{-l}}{r} = \frac{1}{r(c-1)} \nonumber
+\end{align}
+
+da cui:
+\begin{align}
+    &Pr\left[\mbox{rehashing}\right] \nonumber \\
+    &= \sum_{i=1}^{r} Pr\left[\exists \mbox{un ciclo per il nodo i nel grafo cuckoo}\right] \nonumber \\
+    &= r*\frac{1}{r(c-1)} = \frac{1}{c-1} \nonumber
+\end{align}
+
+Ponendo $c=3$ la probabilità di un rehash è $\frac{1}{2}$, e di n rehash è
+$\frac{1}{2^n}$, quindi il numero atteso di rehash ad ogni inserimento è
+
+\[ \sum_{i=1}^{n} i*\frac{1}{2^i} = 2. \]
+
+Il costo medio di un inserimento quindi è dato dal costo di due rehashing, 
+ognuno da $\Theta(n)$, quindi a sua volta $\Theta(n)$, mentre il costo
+ammortizzato per ogni inserimento è $O(1)$.
+
+La cancellazione avviene in $O(1)$, cercando il valore da cancellare nelle sole
+due celle possibili ed eliminandolo, è possibile osservare infatti che la
+struttura che si ottiene è ancora un cuckoo hashing dove la funzione $h_1(x)$
+è quella che mette tutti gli elementi esattamente dove sono e la funzione
+$h_2(x)$ è una qualunque (o varianti equivalenti).
