@@ -5,14 +5,16 @@
     i contatori con valori arbitrari.
 \end{problem*}
 
-Vogliamo dimostrare che vale
+\begin{lemma}[Approssimazione]
+Per il count min sketch a valori arbitrari vale:
 
 \[
     Pr\left[F[i] - 3\varepsilon\vectornorm{F} \le \tilde{F}[i]
         \le F[i] + 3\varepsilon\vectornorm{F}\right] \ge 1 - \delta^{\frac{1}{4}}
 \]
 
-Con $\tilde{F}[i] = median_{\substack{j}}\{T[j, h_j(i)]\}$.
+con $\tilde{F}[i] = median_{\substack{j}}\{T[j, h_j(i)]\}$.
+\end{lemma}
 
 \begin{proof*}
     Osserviamo innanzi tutto che $\tilde{F}[i] = T[\hat{i}, h_{\hat{i}}(i)]$

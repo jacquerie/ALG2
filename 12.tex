@@ -5,3 +5,129 @@
     interval query (i.e., approssimare \(\sum_{k=i}^j{F[k]}\)).
 \end{problem*}
 
+Per risolvere questo problema suddividiamo ogni range in modo canonico in
+sottorange di dimensione $2^k$, e usiamo $\log n$ count min sketch per
+memorizzare separatamente i sottorange di dimensione diversa.
+
+La suddivisione avviene in intervalli di tipo $[x2^k+1,(x+1)2^k]$ (\emph{diadici})
+per $k \in [0, \log n-1]$, e ogni volta che ci arriva un dato andiamo ad
+incrementare tutti i count min sketch negli intervalli corrispondenti.
+
+\begin{lemma}[Suddivisione canonica]
+    Qualunque intervallo può essere suddiviso in al più $2 \log{n}$ intervalli
+    diadici.
+\end{lemma}
+
+\begin{proof*}
+    Sia $[l^*, r^*]$ l'intervallo diadico più grande che può stare dentro il
+    nostro intervallo $[l, r]$. Evidentemente vale $|[l^*, r^*]| < n$ e
+    quindi l'intervallo diadico è al più della forma
+    $[x2^{\log n-1}+1,(x+1)2^{\log n-1}]$, cioè $k < \log{n}$.
+
+    Consideriamo i due intervalli indotti $[l, x2^{k}+1]$ e $[(x+1)2^{k}, r]$,
+    ci sono due casi possibili:
+    \begin{itemize}
+        \item uno dei due ha dimensione $\ge 2^k$, questo non è un assurdo
+        perché i due intervalli di dimensione $2^k$ potrebbero essere spostati
+        di $2^k$ rispetto all'intervallo diadico canonico più vicino di
+        dimensione $2^{k+1}$.
+
+        In questo caso ci limitiamo a togliere l'intervallo di dimensione $2^k$
+        o dal fondo del primo intervallo indotto o dall'inizio del secondo
+        (è semplice immaginare perché si deve trovare proprio lì), e ci
+        riconduciamo al secondo caso.
+
+        \item entrambi gli intervalli indotti hanno dimensione $< 2^k$, questo
+        vuol dire che ogni intervallo indotto può contenere al più un intervallo
+        di dimensione $2^{k-1}$, altrimenti sarebbe di dimensione $2^k$ e quindi
+        assurdo. Inoltre l'intervallo di dimensione $2^{k-1}$ può essere solo in
+        fondo al primo intervallo o in testa al secondo (altrimenti potrebbero
+        essercene due). Quindi nel caso non si trovasse nessun intervallo di
+        dimensione $2^{k-1}$ contenuto vorrebbe dire che lo stesso intervallo
+        indotto ha dimensione $< 2^{k-1}$, quindi ripetiamo l'osservazione con
+        $k-2$, e così via.
+    \end{itemize}
+
+    Il numero totale di intervalli è quindi dato da $2 \log{n}$, in quanto
+    per $k_{max}$ ce n'è al più due, in accordo al primo caso, e per valori
+    di $k$ minori ce ne può essere al più uno per ogni intervallo indotto,
+    siccome andiamo a togliere sempre dalla testa o dalla coda, siccome
+    $k_{max} < \log{n}$ abbiamo la tesi.
+
+\end{proof*}
+
+\begin{lemma}[Approssimazione]
+    Per la range query con valori non negativi valgono le seguenti proprietà:
+    \begin{itemize}
+        \item $\mathcal{Q}(l, r) \le \tilde{\mathcal{Q}}(l, r)$
+        \item $Pr \left[\tilde{\mathcal{Q}}(l, r) \le \mathcal{Q}(l, r)
+            + 2 \varepsilon \log{n} \vectornorm{F}\right] \ge 1-\delta$.
+    \end{itemize}
+\end{lemma}
+
+\begin{proof*}
+    Abbiamo
+    \[
+        \tilde{\mathcal{Q}}(l, r) = \sum_{k = 0}^{\log{n}-1} \tilde{\mathcal{Q}}(d_{2^k, i_{k, 1}}) +
+            \tilde{\mathcal{Q}}(d_{2^k, i_{k, 2}})
+    \]
+    dove $d_{2^k, i_{k, 1}}$ e $d_{2^k, i_{k, 1}}$ sono i due intervalli
+    diadici di dimensione $2^k$ in cui abbiamo scomposto il nostro intervallo
+    $[l, r]$, supponendo per tutti gli intervalli non esistenti di avere $d_{a,b} = []$
+    e $\mathcal{Q}(d_{a, b}) = 0$.
+
+    Inoltre, per ogni intervallo diadico, dalle proprietà dei count min sketch
+    per valori non negativi si ha:
+    \[
+        \tilde{\mathcal{Q}}(d_{2^k, i}) =
+            \mathcal{Q}(d_{2^k, i}) + \sum_{l=1}^{\frac{n}{2^k}} I_{\hat{i}, i, l} \mathcal{Q}(d_{2^k, l})
+    \]
+
+    da cui segue la prima disuguaglianza.
+
+    Per la seconda disuguaglianza abbiamo, ponendo $X_{j,i} =
+    \sum_{l=1}^{\frac{n}{2^k}} I_{\hat{i}, i, l} \mathcal{Q}(d_{2^k, l})$
+
+    \[
+        E[X_{j, i}] \le \frac{\varepsilon}{e} \vectornorm{F}
+    \]
+
+
+    Quindi, su tutti gli intervalli
+    \[
+        E[\tilde{\mathcal{Q}}(l, r) - \mathcal{Q}(l, r)] \le 2 \frac{\varepsilon}{e} \log{n} \vectornorm{F}
+    \]
+
+%    Quindi, per la disuguaglianza di Markov
+%    \begin{align}
+%        &Pr[\tilde{\mathcal{Q}}(d_{2^k, i}) \ge \mathcal{Q}(d_{2^k, i})
+%            + 2 \varepsilon \log{n} \vectornorm{F}] \nonumber \\
+%        &= Pr[X_{j, i} \ge 2 \varepsilon \log{n} \vectornorm{F}] \nonumber \\
+%        &\le \frac{E[X_{j, i}]}{2 \varepsilon \log{n} \vectornorm{F}} \nonumber \\
+%        &\le \frac{2 \frac{\varepsilon}{e} \log{n} \vectornorm{F}}{2 \varepsilon \log{n} \vectornorm{F}} \nonumber \\
+%        &= \frac{1}{e} < \frac{1}{2} \nonumber
+%    \end{align}
+
+    Da cui, per la disuguaglianza di Markov:
+    \begin{align}
+        &Pr \left[\tilde{\mathcal{Q}}(l, r) \ge \mathcal{Q}(l, r)
+            + 2 \varepsilon \log{n} \vectornorm{F}\right] \nonumber \\
+        &=
+        Pr \left[\mathcal{Q}(l, r) + \tilde{\mathcal{Q}}(l, r) - \mathcal{Q}(l, r) \ge \mathcal{Q}(l, r)
+            + 2 \varepsilon \log{n} \vectornorm{F}\right] \nonumber \\
+        &=
+        Pr \left[\tilde{\mathcal{Q}}(l, r) - \mathcal{Q}(l, r) \ge
+            2 \varepsilon \log{n} \vectornorm{F}\right] \nonumber \\
+        &\le
+        \left(
+            \frac{E[\tilde{\mathcal{Q}}(l, r) - \mathcal{Q}(l, r)]}{2 \varepsilon \log{n} \vectornorm{F}}
+        \right) ^ r
+            \nonumber \\
+        &=
+        \left(
+            \frac{2 \frac{\varepsilon}{e} \log{n}}{2 \varepsilon \log{n} \vectornorm{F}}
+        \right)^r = \left(\frac{1}{e}\right)^r < \left(\frac{1}{2}\right)^r = \delta \nonumber 
+    \end{align}
+    da cui segue la tesi.
+
+\end{proof*}

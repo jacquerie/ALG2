@@ -5,87 +5,89 @@
     prodotto scalare (i.e., approssimare \(\sum_{k=1}^n{F_a[k]\cdot F_b[k]}\)).
 \end{problem*}
 
-Per il prodotto scalare, con valori non negativi per $F_a$ e $F_b$ valgono
-\begin{itemize}
-    \item $a \cdot b \le \tilde{a \cdot b}$
-    \item $Pr[\tilde{a \cdot b} \le a \cdot b
-        + \varepsilon \vectornorm{a}\vectornorm{b}] \ge 1 - \delta$
-
-    con $\displaystyle \tilde{a \cdot b} = \min_j\{\sum_{i=1}^{c}T_a[j,h_j(i)]T_b[j,h_j(i)]\}$.
-
-    \begin{proof*}
-    Osserviamo innanzi tutto che per un certo $\hat{i}$ vale
-    
-    \[
-        \tilde{a \cdot b} = \sum_{i=1}^c T_a[\hat{i}, h_{\hat{i}}(i)] T_b[\hat{i}, h_{\hat{i}}(i)]
-    \]
-
-    e se definiamo la variabile $I_{j, i, k}$ come
-
-    \[
-        I_{j, i, k} =
-        \begin{cases}
-            1 & \mbox{se } i \neq k \land h_j(i) = h_j(k) \\
-            0 & \mbox{altrimenti}
-        \end{cases}
-    \]
-
-    otteniamo la seguente uguaglianza:
-
-    \[
-        \tilde{a \cdot b} = a \cdot b + \sum_{p, q} I_{\hat{i}, p, q} F_a[p] F_b[q]
-    \]
-
+\begin{lemma}[Approssimazione]
+    Per il prodotto scalare, con valori non negativi per $F_a$ e $F_b$ valgono
     \begin{itemize}
-    \item Non vale ridere perché ho scritto fap
-    \item Non vale tornare indietro per leggere se l'ho scritto davvero
+        \item $a \cdot b \le \tilde{a \cdot b}$
+        \item $Pr[\tilde{a \cdot b} \le a \cdot b
+            + \varepsilon \vectornorm{a}\vectornorm{b}] \ge 1 - \delta$
     \end{itemize}
+\end{lemma}
 
-    pertanto, vista la non negatività degli elementi di $F_a$ e $F_b$ la prima
-    disuguaglianza vale banalmente.
+con $\displaystyle \tilde{a \cdot b} = \min_j\{\sum_{i=1}^{c}T_a[j,h_j(i)]T_b[j,h_j(i)]\}$.
 
-    Per la seconda, ragioniamo col complementare e cerchiamo di calcolare
-    \[ Pr[\tilde{a \cdot b} \ge a \cdot b + \varepsilon \vectornorm{a}\vectornorm{b}] \]
+\begin{proof*}
+Osserviamo innanzi tutto che per un certo $\hat{i}$ vale
 
-    Che, se poniamo $X_{j, i} = \sum_{p, q} I_{j, p, q} F_a[p] F_b[q]$ equivale a calcolare
+\[
+    \tilde{a \cdot b} = \sum_{i=1}^c T_a[\hat{i}, h_{\hat{i}}(i)] T_b[\hat{i}, h_{\hat{i}}(i)]
+\]
 
-    \[ Pr[X_{\hat{i}, i} \ge \varepsilon \vectornorm{a}\vectornorm{b}] \]
+e se definiamo la variabile $I_{j, i, k}$ come
 
-    Per poterla calcolare ci servono innanzi tutto le speranze di $E[I_{j, i, k}]$
-    e $E[X_{j,i}]$, date da:
+\[
+    I_{j, i, k} =
+    \begin{cases}
+        1 & \mbox{se } i \neq k \land h_j(i) = h_j(k) \\
+        0 & \mbox{altrimenti}
+    \end{cases}
+\]
 
-    \begin{align}
-        E[I_{j, i, k}] &= Pr\left[i \neq k \land h_j(i) = h_j(k)\right] \nonumber \\
-        &= Pr\left[\cup_{a=1}^c i \neq k \land h_j(i) = a \land h_j(k) = a \right] \nonumber \\
-        &= \sum_{a=1}^c Pr\left[i \neq k \land h_j(i) = a \land h_j(k) = a \right] \nonumber \\
-        &= \sum_{a=1}^c Pr\left[h_j(i) = a\right]Pr\left[i \neq k \land h_j(k) = a \right] \nonumber \\
-        &= \frac{c}{c^2} = \frac{1}{c} = \frac{\varepsilon}{e} \nonumber
-    \end{align}
+otteniamo la seguente uguaglianza:
 
-    \begin{align}
-        E[X_{j, i}] &= E[\sum_{i, k} I_{j, i, k} F_a[i] F_b[k]] \nonumber \\
-        &= \sum_{i, k} E[I_{j, i, k}] F_a[i] F_b[k] \nonumber \\
-        &= \frac{\varepsilon}{e} \sum_{i, k} F_a[i]F_b[k] \nonumber \\
-        &\le \frac{\varepsilon}{e} \vectornorm{a}\vectornorm{b} \nonumber
-    \end{align}
+\[
+    \tilde{a \cdot b} = a \cdot b + \sum_{p, q} I_{\hat{i}, p, q} F_a[p] F_b[q]
+\]
 
-    Si ha quindi, per la disuguaglianza di Markov:
-
-    \begin{align}
-        Pr[X_{j, i} \ge \varepsilon \vectornorm{a}\vectornorm{b}] &\le
-            \frac{E[X_{j, i}]}{\varepsilon \vectornorm{a}\vectornorm{b}} \nonumber \\
-            &= \frac{\frac{\varepsilon}{e} \vectornorm{a}\vectornorm{b}}
-                {\varepsilon \vectornorm{a}\vectornorm{b}} \nonumber \\
-            &= \frac{1}{e} < \frac{1}{2} \nonumber
-    \end{align}
-
-    Osserviamo che affinché valga $X_{\hat{i}, i} \ge \varepsilon \vectornorm{a}\vectornorm{b}$,
-    è necessario che valga per tutte le $r$ $X_{j, i}$, in quanto $X_{\hat{i}, i}$
-    è la minima tra queste, trattandosi le $X_{j, i}$ di variabili casuali
-    indipendenti, abbiamo che:
-    \[ Pr[X_{\hat{i}, i} \ge \varepsilon \vectornorm{a}\vectornorm{b}] < \frac{1}{2^r} = \delta, \]
-    da cui
-    \[ Pr[X_{\hat{i}, i} \le \varepsilon \vectornorm{a}\vectornorm{b}] \ge 1 - \delta. \]
-    \qed
-    \end{proof*}
+\begin{itemize}
+\item Non vale ridere perché ho scritto fap
+\item Non vale tornare indietro per leggere se l'ho scritto davvero
 \end{itemize}
+
+pertanto, vista la non negatività degli elementi di $F_a$ e $F_b$ la prima
+disuguaglianza vale banalmente.
+
+Per la seconda, ragioniamo col complementare e cerchiamo di calcolare
+\[ Pr[\tilde{a \cdot b} \ge a \cdot b + \varepsilon \vectornorm{a}\vectornorm{b}] \]
+
+Che, se poniamo $X_{j, i} = \sum_{p, q} I_{j, p, q} F_a[p] F_b[q]$ equivale a calcolare
+
+\[ Pr[X_{\hat{i}, i} \ge \varepsilon \vectornorm{a}\vectornorm{b}] \]
+
+Per poterla calcolare ci servono innanzi tutto le speranze di $E[I_{j, i, k}]$
+e $E[X_{j,i}]$, date da:
+
+\begin{align}
+    E[I_{j, i, k}] &= Pr\left[i \neq k \land h_j(i) = h_j(k)\right] \nonumber \\
+    &= Pr\left[\cup_{a=1}^c i \neq k \land h_j(i) = a \land h_j(k) = a \right] \nonumber \\
+    &= \sum_{a=1}^c Pr\left[i \neq k \land h_j(i) = a \land h_j(k) = a \right] \nonumber \\
+    &= \sum_{a=1}^c Pr\left[h_j(i) = a\right]Pr\left[i \neq k \land h_j(k) = a \right] \nonumber \\
+    &= \frac{c}{c^2} = \frac{1}{c} = \frac{\varepsilon}{e} \nonumber
+\end{align}
+
+\begin{align}
+    E[X_{j, i}] &= E[\sum_{i, k} I_{j, i, k} F_a[i] F_b[k]] \nonumber \\
+    &= \sum_{i, k} E[I_{j, i, k}] F_a[i] F_b[k] \nonumber \\
+    &= \frac{\varepsilon}{e} \sum_{i, k} F_a[i]F_b[k] \nonumber \\
+    &\le \frac{\varepsilon}{e} \vectornorm{a}\vectornorm{b} \nonumber
+\end{align}
+
+Si ha quindi, per la disuguaglianza di Markov:
+
+\begin{align}
+    Pr[X_{j, i} \ge \varepsilon \vectornorm{a}\vectornorm{b}] &\le
+        \frac{E[X_{j, i}]}{\varepsilon \vectornorm{a}\vectornorm{b}} \nonumber \\
+        &= \frac{\frac{\varepsilon}{e} \vectornorm{a}\vectornorm{b}}
+            {\varepsilon \vectornorm{a}\vectornorm{b}} \nonumber \\
+        &= \frac{1}{e} < \frac{1}{2} \nonumber
+\end{align}
+
+Osserviamo che affinché valga $X_{\hat{i}, i} \ge \varepsilon \vectornorm{a}\vectornorm{b}$,
+è necessario che valga per tutte le $r$ $X_{j, i}$, in quanto $X_{\hat{i}, i}$
+è la minima tra queste, trattandosi le $X_{j, i}$ di variabili casuali
+indipendenti, abbiamo che:
+\[ Pr[X_{\hat{i}, i} \ge \varepsilon \vectornorm{a}\vectornorm{b}] < \frac{1}{2^r} = \delta, \]
+da cui
+\[ Pr[X_{\hat{i}, i} \le \varepsilon \vectornorm{a}\vectornorm{b}] \ge 1 - \delta. \]
+\qed
+\end{proof*}
