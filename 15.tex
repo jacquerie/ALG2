@@ -6,3 +6,59 @@
   foglia appena inserita verso la radice mediante le rotazioni).
 \end{problem*}
 
+L'algoritmo per l'inserimento è il seguente:
+
+\begin{algorithm}
+    \caption{Inserimento in un albero random di ricerca binario}
+    \begin{algorithmic}[1]
+        \Function {insert}{$x, T$}
+            \State $n \gets T.size$
+            \State $r \gets random(0, n)$
+
+            \If {$r == n$}
+                \State $insert\_root(x, T)$
+            \EndIf
+            \If {$x < T.key$}
+                \State $insert(x, T.left)$
+            \Else
+                \State $insert(x, T.right)$
+            \EndIf
+        \EndFunction
+    \end{algorithmic}
+\end{algorithm}
+
+a questo punto si pone il prolbema di inserire l'elemento nel sottoalbero
+che lo dovrà contenere in modo da mantenere l'integrità della struttura,
+per fare questo usiamo il seguente algoritmo, che separa gli elementi più
+piccoli di $x$ e quelli più grandi di $x$, e al posto del sottoalbero di
+partenza mette un sottoalbero con radice $x$, figlio sinistro il sottoalbero
+contenente tutti valori più piccoli di $x$ e figlio destro contenente tutti
+quelli più grandi:
+
+\begin{algorithm}
+    \caption{Inserimento nella radice di un sottoalbero}
+    \begin{algorithmic}[1]
+        \Function {insert\_root}{$x, T$}
+            \State $rbintree$ $S, G$
+            \State $split(x, T, \&S, \&G)$
+            \State $T \gets new\_node()$
+            \State $T.left = S, T.right = G$
+            \State \Return{$T$}
+        \EndFunction
+
+        \Function{split}{$x, T, L, R$}
+            \If {$empty(T)$}
+                \State $*L \gets empty\_tree(), *R \gets empty\_tree()$
+                \State \Return {}
+            \EndIf
+            \If {$x < T.key$}
+                \State $*R \gets T$
+                \State $split(x, T.left, L, \&(*R.left))$
+            \Else
+                \State $*L \gets T$
+                \State $split(x, T.right, \&(*L.right), R)$
+            \EndIf
+            \State \Return {}
+        \EndFunction
+    \end{algorithmic}
+\end{algorithm}

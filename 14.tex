@@ -18,13 +18,13 @@ $h_2(x)$, in questo modo:
 \begin{algorithm}
     \caption{Inserimento in Cuckoo hashing}
     \begin{algorithmic}[1]
-        \STATE provo ad inserire x in $h_1(x)$
-        \STATE se la cella è libera lo inserisco semplicemente
-        \STATE se la cella non è libera tolgo l'elemento y dalla cella $h_1(x)$
+        \State provo ad inserire x in $h_1(x)$
+        \State se la cella è libera lo inserisco semplicemente
+        \State se la cella non è libera tolgo l'elemento y dalla cella $h_1(x)$
         e ripeto il procedimento per y, provando a inserirlo in $h_1(y)$ se
         $h_1(x) = h_2(y)$ o in $h_2(y)$ se $h_1(x) = h_1(y)$, per un massimo di
         $n$ volte.
-        \STATE se il valore non è stato ancora inserito si cambiano le funzioni
+        \State se il valore non è stato ancora inserito si cambiano le funzioni
         di hashing, e si riprova ad inserire il valore che si stava cercando di
         inserire alla $n$-esima iterazione.
     \end{algorithmic}

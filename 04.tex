@@ -20,15 +20,15 @@ lineare, nel secondo la correttezza dell'algoritmo.
 \begin{algorithm}
     \caption{Multi-selezione in memoria esterna}
     \begin{algorithmic}[1]
-        \STATE Carico e ordino in memoria principale \(\frac{N}{M}\) run
+        \State Carico e ordino in memoria principale \(\frac{N}{M}\) run
         di \(M\) elementi ciascuno.
-        \STATE Da ogni run seleziono un elemento ogni 
+        \State Da ogni run seleziono un elemento ogni 
         \(\frac{\sqrt{m}}{4}\) e chiamo \(G\) (elementi verdi) l'insieme 
         degli elementi selezionati.
-        \STATE Uso l'algoritmo dei cinque autori \(\sqrt{m}\) volte per
+        \State Uso l'algoritmo dei cinque autori \(\sqrt{m}\) volte per
         selezionare in \(G\) un elemento ogni \(\frac{4N}{m}\) e chiamo 
         \(R\) (elementi rossi) l'insieme degli elementi selezionati.
-        \STATE Ritorno \(R\).
+        \State Ritorno \(R\).
     \end{algorithmic}
 \end{algorithm}
 
