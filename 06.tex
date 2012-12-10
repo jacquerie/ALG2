@@ -6,4 +6,23 @@
     implicito), trovare la regola per navigare in tale albero senza usare puntatori
     espliciti.
 \end{problem*}
-
+Per consentire la navigazione nel layout implicito è necessaro costruire, durante la fase di archiviazione dell'albero, una tabella di dimensione $O(\log n)$, in cui per ogni profondità $d$, memorizziamo:
+\begin{itemize}
+\item $\mbox{B}[d]$: la dimensione di ogni bottom tree avente radice a profondità $d$;
+\item $\mbox{T}[d]$: la dimensione del corrispondente top tree;
+\item $\mbox{D}[d]$: la profondità della radice di tale top tree.
+\end{itemize}
+Inoltre quando effettuiamo una ricerca (a partire dalla radice) di un nodo $v$ di profondità $d$, teniamo traccia di:
+\begin{itemize}
+\item $i$: la posizione che $v$ occuperebbe in una memorizzazione BFS;
+\item $\mbox{Pos}[j]$: la posizione nella memorizzazione vEB del particolare nodo $z$ a profondità $j$ che ho incontrato durante la ricerca.
+\end{itemize}
+Consideriamo la rappresentazione binaria di $i$: letti da sinistra verso destra, i suoi bit rappresentano le svolte effettuate nella ricerca di $v$ nella rappresentazione BFS (secondo la regola: $0$ svolta a sinistra nella BFS, $1$ svolta a destra; nota: il bit più a sinistra ovviamente vale sempre $1$, e indica il fatto che si parte con la radice).\newline
+Consideriamo una suddivisione in cui il nodo $v$ cercato è radice di un bottom tree. Allora se il corrispondente top tree è alto $k$, cioè $\mbox{T}[d]=2^k-1$, i $k$ bit più a destra di $i$ rappresentano l'indice del bottom tree cercato tra tutti quelli della suddivisione in questione. Poiché tutti i bit di $\mbox{T}[d]$ (in totale $k$) valgono $1$, posso calcolare questo indice come $i \And \mbox{T}[d]$. \newline
+Vale allora \[\mbox{Pos}[d]=\mbox{Pos}(\mbox{D}[d])+\mbox{T}[d]+(i\And \mbox{T}[d])\mbox{B}[d],\] ossia:
+\begin{itemize}
+\item[-] Parto da $\mbox{Pos}(\mbox{D}[d])$, posizione della radice del top tree; dopodiché avanzo di:
+\item[-] Tanti nodi quanti ve ne sono nel top tree, cioé $\mbox{T}[d]$;
+\item[-] Tanti nodi quandi ve ne sono in ogni bottom tree, cioé $\mbox{B}[d]$, e faccio questo tante volte quanti sono i bottom tree che precedono quello di radice $v$ ossia, poiché gli indici partono da 0, $i\And \mbox{T}[d]$.
+\end{itemize}
+Usando ripetutamente questa formula è dunque possibile effettuare la ricerca di un qualsiasi nodo $v$.
