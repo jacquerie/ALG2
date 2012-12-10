@@ -5,4 +5,9 @@
     \(H = \left\{h(x) = ((ax + b ) \mod p) \mod m\right\}\) \`e (quasi) uniforme, dove 
     \(a,b\in [m]\) con \(a\neq 0\) e \(p\) \`e un numero primo sufficientemente grande.
 \end{problem*}
+Siano $k\neq l$ due chiavi, $h\in H$ e $r=ak+b \pmod p$, $s=al+b\pmod p$. Abbiamo che $r-s = a(k-l) \pmod p$ da cui, essendo $a\neq0$ e, per $p$ sufficientemente grande, $(k-l)\neq 0 \pmod p$, segue che $r-s\neq0$.\newline
+È dunque possibile una collisione tra gli hash delle due chiavi se e solo se $r \pmod m = s \pmod m$.\newline
+Notiamo che per $a$ sono possibili $p-1$ valori (lo $0$ non va bene) mentre per $b$ ve ne sono $p$: in tutto abbiamo $p(p-1)$ possibili coppie $(a, b)$; ma anche per $(r, s)$ vi sono $p(p-1)$ possibilità (fissato $r$, per $s$ vanno bene tutti i valori tranne quello assunto da $r$): segue che le coppie $(a, b)$ e le coppie $(r, s)$ possono essere messe in corrispondenza biunivoca. Inoltre se la coppia $(a, b)$ è scelta a caso con probabilità uniforme ciascuna coppia $(r, s)$ ha la stessa probabilità di essere l'immagine di due date chiavi $l$ e $k$. Questo significa che \[\Pr[~h(k)=h(l)~]=\Pr[~r = s \pmod m].\]
+Fissiamo $r$: i possibili valori per $s$ che originano una "collisione" sono al più \[\left\lceil \frac{p}{m} \right\rceil-1 \le \frac{p+m-1}{m} - 1= \frac{p-1}{m}.\]
+Da questo segue che \[\Pr[~r=s\pmod m] \le \frac{\frac{p-1}{m}}{p-1}=\frac{1}{m},\] il che significa \[\Pr[h(k)=h(l)]\le\frac{1}{m},\] come volevasi dimostrare.
 
