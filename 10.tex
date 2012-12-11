@@ -33,7 +33,7 @@ con $\tilde{F}[i] = median_{\substack{j}}\{T[j, h_j(i)]\}$.
 
     Ponendo $X_{j, i} = \sum_{k=1}^n I_{j, i, k} F[k]$ abbiamo:
     
-    \begin{align}
+    \begin{align*}
         & Pr\left[F[i] - 3\varepsilon\vectornorm{F} \le \tilde{F}[i]
             \le F[i] + 3\varepsilon\vectornorm{F}\right] \nonumber \\
         &= Pr\left[F[i] - 3\varepsilon\vectornorm{F}
@@ -46,30 +46,30 @@ con $\tilde{F}[i] = median_{\substack{j}}\{T[j, h_j(i)]\}$.
             \le X_{\hat{i},i}
             \le 3\varepsilon\vectornorm{F}\right] \nonumber \\
         &= Pr\left[|X_{\hat{i},i}| \le 3\varepsilon\vectornorm{F}\right] \nonumber
-    \end{align}
+    \end{align*}
 
-    \begin{align}
-        E[I_{j, i, k}] &= Pr\left[i \neq k \land h_j(i) = h_j(k)\right] \nonumber \\
-        &= Pr\left[\cup_{a=1}^c i \neq k \land h_j(i) = a \land h_j(k) = a \right] \nonumber \\
-        &= \sum_{a=1}^c Pr\left[i \neq k \land h_j(i) = a \land h_j(k) = a \right] \nonumber \\
-        &= \sum_{a=1}^c Pr\left[h_j(i) = a\right]Pr\left[i \neq k \land h_j(k) = a \right] \nonumber \\
-        &= \frac{c}{c^2} = \frac{1}{c} = \frac{\varepsilon}{e} \nonumber
-    \end{align}
+    \begin{align*}
+        E[I_{j, i, k}] &= Pr\left[i \neq k \land h_j(i) = h_j(k)\right] \\ 
+        &= Pr\left[\cup_{a=1}^c i \neq k \land h_j(i) = a \land h_j(k) = a \right] \\
+        &= \sum_{a=1}^c \underbrace{Pr\left[i \neq k \land h_j(i) = a \land h_j(k) = a \right]}_
+            {\mbox{Sono funzioni di hash uniformi}}\\
+        &\le \sum_{a=1}^c \frac{1}{c} = \frac{c}{c^2} = \frac{1}{c} = \frac{\varepsilon}{e}
+    \end{align*}
 
     da cui
-    \begin{align}
-        E[|X_{j, i}|] &= E[|\sum_{k=1}^n I_{j, i, k} F[k]|] \nonumber \\
-        &\le \sum_{k=1}^n E[|I_{j, i, k}|] |F[k]| \nonumber \\
-        &= \frac{\varepsilon}{e} \sum_{k=1}^n |F[k]| \nonumber \\
-        &= \frac{\varepsilon}{e} \vectornorm{F} \nonumber
-    \end{align}
+    \begin{align*}
+        E[|X_{j, i}|] &= E\left[|\sum_{k=1}^n I_{j, i, k} F[k]|\right] \\
+        &\le \sum_{k=1}^n E[|I_{j, i, k}|] |F[k]| 
+        = \frac{\varepsilon}{e} \sum_{k=1}^n |F[k]|]
+        = \frac{\varepsilon}{e} \vectornorm{F}
+    \end{align*}
 
     e quindi per ogni $j$, usando la disuguaglianza di Markov
     \[
         Pr\left[|X_{j, i}| \ge 3\varepsilon\vectornorm{F}\right] \le
             \frac{E[|X_{j,i}|]}{3\varepsilon\vectornorm{F}} 
         = \frac{\frac{\varepsilon}{e} \vectornorm{F}}{3\varepsilon\vectornorm{F}}
-        = \frac{1}{3e} < \frac{1}{8} \nonumber
+        = \frac{1}{3e}
     \]
 
     Notiamo che perché valga $|X_{\hat{i}, i}| \ge 3\varepsilon\vectornorm{F}$,
@@ -86,7 +86,7 @@ con $\tilde{F}[i] = median_{\substack{j}}\{T[j, h_j(i)]\}$.
 
     Se poniamo $p = E[Y_j] = Pr[|X_{j,i}| \ge 3 \varepsilon\vectornorm{F}|]$,
     e $Y = Y_1 + \dots + Y_r$, abbiamo $E[Y] = rp$. \\
-    Noi vogliamo $Y = > \frac{r}{2}$, per calcolarne la probabilità dobbiamo
+    Noi vogliamo $Y \ge \frac{r}{2}$, per calcolarne la probabilità dobbiamo
     introdurre la disuguaglianza di Chernoff.
 
     \begin{definition*}[Chernoff bound]
@@ -99,24 +99,24 @@ con $\tilde{F}[i] = median_{\substack{j}}\{T[j, h_j(i)]\}$.
 
     Quindi ponendo $\mu = E[Y] = rp$, $(1+\lambda)\mu = \frac{r}{2} \Rightarrow
     1+\lambda = \frac{1}{2p}$, abbiamo
-    \begin{align}
-        Pr[Y > \frac{r}{2}] &< \left(\frac{e^\lambda}{(1+\lambda)^{1+\lambda}}\right)^\mu \nonumber\\
-        &= \frac{1}{e^\mu}\left(\frac{e}{1+\lambda}\right)^{(1+\lambda)\mu} \nonumber \\
-        &= \frac{1}{e^{rp}}\left(\frac{e}{\frac{1}{2p}}\right)^{\frac{r}{2}} \nonumber \\
-        &= \frac{1}{e^{rp}}(2pe)^{\frac{r}{2}} \nonumber
-    \end{align}
+    \begin{align*}
+        Pr\left[Y > \frac{r}{2}\right] &< \left(\frac{e^\lambda}{(1+\lambda)^{1+\lambda}}\right)^\mu
+        = \frac{1}{e^\mu}\left(\frac{e}{1+\lambda}\right)^{(1+\lambda)\mu} \\
+        &= \frac{1}{e^{rp}}\left(\frac{e}{\frac{1}{2p}}\right)^{\frac{r}{2}}
+        = \frac{1}{e^{rp}}(2pe)^{\frac{r}{2}}
+    \end{align*}
 
-    Quindi se $\frac{1}{e^{rp}}(2pe)^{\frac{r}{2}} \le \frac{1}{2^{\frac{r}{2}}} (= \delta^{\frac{1}{4}})$
+    Quindi se $\frac{1}{e^{rp}}(2pe)^{\frac{r}{2}} \le \frac{1}{2^{\frac{r}{4}}} (= \delta^{\frac{1}{4}})$
     abbiamo concluso:
 
-    \begin{align}
-        \frac{1}{e^{rp}}(2pe)^{\frac{r}{2}} &\le \frac{1}{2^{\frac{r}{2}}} \nonumber \\
-        2^{\frac{r}{4}} &\le e^{rp} \frac{1}{(2pe)^{\frac{r}{2}}} \nonumber \\
-        & \{e^{rp} \ge 1 \mbox{, quindi è sufficiente mostrare quanto sotto}\} \nonumber \\
-        2^{\frac{r}{4}} &\le \frac{1}{(2pe)^{\frac{r}{2}}} \nonumber \\
-        2^{\frac{1}{2}} &\le \frac{1}{2pe} \nonumber \\
-        p &\le \frac{1}{2\sqrt{2}e} \nonumber
-    \end{align}
+    \begin{align*}
+        \frac{1}{e^{rp}}(2pe)^{\frac{r}{2}} \le \frac{1}{2^{\frac{r}{4}}}
+        & \equiv \underbrace{2^{\frac{r}{4}} \le e^{rp} \frac{1}{(2pe)^{\frac{r}{2}}}}
+            _{rp \ge 0 \Rightarrow e^{rp} \ge 1}
+        \Leftarrow 2^{\frac{r}{4}} \le \frac{1}{(2pe)^{\frac{r}{2}}} \\
+        & \equiv 2^{\frac{1}{2}} \le \frac{1}{2pe}
+        \equiv p \le \frac{1}{2\sqrt{2}e}
+    \end{align*}
 
     che vale in quanto $2\sqrt{2}e\sim 7.668$ e $p < \frac{1}{8}$. \qed
 \end{proof*}

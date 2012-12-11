@@ -14,7 +14,7 @@
     \end{itemize}
 \end{lemma}
 
-con $\displaystyle \tilde{a \cdot b} = \min_j\{\sum_{i=1}^{c}T_a[j,h_j(i)]T_b[j,h_j(i)]\}$.
+con $\displaystyle \tilde{a \cdot b} = \min_j\left\{\sum_{i=1}^{c}T_a[j,h_j(i)]T_b[j,h_j(i)]\right\}$.
 
 \begin{proof*}
 Osserviamo innanzi tutto che per un certo $\hat{i}$ vale
@@ -39,11 +39,6 @@ otteniamo la seguente uguaglianza:
     \tilde{a \cdot b} = a \cdot b + \sum_{p, q} I_{\hat{i}, p, q} F_a[p] F_b[q]
 \]
 
-\begin{itemize}
-\item Non vale ridere perché ho scritto fap
-\item Non vale tornare indietro per leggere se l'ho scritto davvero
-\end{itemize}
-
 pertanto, vista la non negatività degli elementi di $F_a$ e $F_b$ la prima
 disuguaglianza vale banalmente.
 
@@ -57,30 +52,30 @@ Che, se poniamo $X_{j, i} = \sum_{p, q} I_{j, p, q} F_a[p] F_b[q]$ equivale a ca
 Per poterla calcolare ci servono innanzi tutto le speranze di $E[I_{j, i, k}]$
 e $E[X_{j,i}]$, date da:
 
-\begin{align}
-    E[I_{j, i, k}] &= Pr\left[i \neq k \land h_j(i) = h_j(k)\right] \nonumber \\
-    &= Pr\left[\cup_{a=1}^c i \neq k \land h_j(i) = a \land h_j(k) = a \right] \nonumber \\
-    &= \sum_{a=1}^c Pr\left[i \neq k \land h_j(i) = a \land h_j(k) = a \right] \nonumber \\
-    &= \sum_{a=1}^c Pr\left[h_j(i) = a\right]Pr\left[i \neq k \land h_j(k) = a \right] \nonumber \\
-    &= \frac{c}{c^2} = \frac{1}{c} = \frac{\varepsilon}{e} \nonumber
-\end{align}
+\begin{align*}
+    E[I_{j, i, k}] &= Pr\left[i \neq k \land h_j(i) = h_j(k)\right] \\ 
+    &= Pr\left[\cup_{a=1}^c i \neq k \land h_j(i) = a \land h_j(k) = a \right] \\
+    &= \sum_{a=1}^c \underbrace{Pr\left[i \neq k \land h_j(i) = a \land h_j(k) = a \right]}_
+        {\mbox{Sono funzioni di hash uniformi}}\\
+    &\le \sum_{a=1}^c \frac{1}{c} = \frac{c}{c^2} = \frac{1}{c} = \frac{\varepsilon}{e}
+\end{align*}
 
-\begin{align}
-    E[X_{j, i}] &= E[\sum_{i, k} I_{j, i, k} F_a[i] F_b[k]] \nonumber \\
-    &= \sum_{i, k} E[I_{j, i, k}] F_a[i] F_b[k] \nonumber \\
-    &= \frac{\varepsilon}{e} \sum_{i, k} F_a[i]F_b[k] \nonumber \\
-    &\le \frac{\varepsilon}{e} \vectornorm{a}\vectornorm{b} \nonumber
-\end{align}
+\begin{align*}
+    E[X_{j, i}] &= E[\sum_{i, k} I_{j, i, k} F_a[i] F_b[k]] 
+    = \sum_{i, k} E[I_{j, i, k}] F_a[i] F_b[k] \\
+    &= \frac{\varepsilon}{e} \sum_{i, k} F_a[i]F_b[k]
+    \le \frac{\varepsilon}{e} \vectornorm{a}\vectornorm{b}
+\end{align*}
 
 Si ha quindi, per la disuguaglianza di Markov:
 
-\begin{align}
+\begin{align*}
     Pr[X_{j, i} \ge \varepsilon \vectornorm{a}\vectornorm{b}] &\le
-        \frac{E[X_{j, i}]}{\varepsilon \vectornorm{a}\vectornorm{b}} \nonumber \\
-        &= \frac{\frac{\varepsilon}{e} \vectornorm{a}\vectornorm{b}}
-            {\varepsilon \vectornorm{a}\vectornorm{b}} \nonumber \\
-        &= \frac{1}{e} < \frac{1}{2} \nonumber
-\end{align}
+        \frac{E[X_{j, i}]}{\varepsilon \vectornorm{a}\vectornorm{b}}
+        = \frac{\frac{\varepsilon}{e} \vectornorm{a}\vectornorm{b}}
+            {\varepsilon \vectornorm{a}\vectornorm{b}} 
+        = \frac{1}{e}
+\end{align*}
 
 Osserviamo che affinché valga $X_{\hat{i}, i} \ge \varepsilon \vectornorm{a}\vectornorm{b}$,
 è necessario che valga per tutte le $r$ $X_{j, i}$, in quanto $X_{\hat{i}, i}$
