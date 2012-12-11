@@ -12,15 +12,15 @@
 
 Mostreremo che il problema presenta un lower-bound di $\displaystyle\Omega\left(\min\left\{N,~\frac{N}{B}\log_{\frac{M}{B}}\frac{N}{B}\right\}\right)$.
 L'idea è la seguente: consideriamo una sequenza di $t$ operazioni di input, e contiamo quante permutazioni diverse possiamo ottenere. Trovando il minimo $t$ che ci garantisca la possibilità di ottenere \textit{tutte} le permutazioni distinte avremo allora il lower-bound desiderato.\[\]
-Consideriamo una generica operazione di input: possiamo scegliere tra $\frac{N}{B}$ pagine in memoria. Distinguiamo ora due casi:
+Consideriamo una generica operazione di input: possiamo scegliere tra al più $N$ pagine in memoria (in generale se ho effettuato $k$ operazioni di I/O le pagine tra cui scegliere sarebbero $\frac{N}{B} + k$; in ogni caso se ho più di $N$ pagine già scritte allora ho già permutato gli elementi nell'ordine corretto, quindi è lecito usare $N$ come sovrastima). Distinguiamo ora due casi:
 \begin{itemize}
 \item Se la pagina che ho scelto viene caricata in memoria per la prima volta (e questo avviene $N \choose B$ volte), posso permutare i suoi elementi in $B!$ modi, e disporli tra gli elementi già in memoria in al più $M\choose{B}$ modi.
 \item Se la pagina era già stata caricata in memoria in precedenza, i suoi elementi sono già permutati nell'ordine desirderato, dunque devo solo scegliere gli $M\choose B$ modi in cui disporli rispetto agli elementi già in memoria.
 \end{itemize}
-Unendo i due casi, dopo una sequenza di $t$ I/O posso produrre al più \[\left(\frac{N}{B}\right)^t\cdot(B!)^\frac{N}{B}\cdot {M\choose B}^t\] permutazioni distinte; ovviamente vogliamo che questo numero risulti maggiore di $N!$. Passando ai logaritmi, dev'essere \[t\log \frac{N}{B} + \frac{N}{B}\log B! + t\log {M\choose B} \ge \log N!,\]da cui, usando le approssimazioni $\log x! \sim x\log x$ e $\log{n\choose k} \sim k\log\frac{n}{k}$, \[t\log \frac{N}{B} + N\log B + tB\log\frac{M}{B} \ge N\log N\]\[t\left(\log \frac{N}{B} + B\log\frac{M}{B}\right)\ge N(\log N-\log B)\]\[t\ge\frac{N\log\frac{N}{B}}{\log \frac{N}{B} + B\log\frac{M}{B}}\]
+Unendo i due casi, dopo una sequenza di $t$ I/O posso produrre al più \[N^t\cdot(B!)^\frac{N}{B}\cdot {M\choose B}^t\] permutazioni distinte; ovviamente vogliamo che questo numero risulti maggiore di $N!$. Passando ai logaritmi, dev'essere \[t\log N + \frac{N}{B}\log B! + t\log {M\choose B} \ge \log N!,\]da cui, usando le approssimazioni $\log x! \sim x\log x$ e $\log{n\choose k} \sim k\log\frac{n}{k}$, \[t\log N + N\log B + tB\log\frac{M}{B} \ge N\log N\]\[t\left(\log N + B\log\frac{M}{B}\right)\ge N(\log N-\log B)\]\[t\ge\frac{N\log\frac{N}{B}}{\log N + B\log\frac{M}{B}}\]
 Distinguiamo ancora due casi:
 \begin{itemize}
-\item Se $\log \frac{N}{B} \le B \log\frac{M}{B}$ dev'essere \[\displaystyle t \ge \frac{N \log \frac{N}{B}}{2B\log\frac{M}{B}}=\Omega\left(\frac{N}{B}\log_{\frac{M}{B}}\frac{N}{B}\right).\]
-\item Se invece $\log \frac{N}{B} \ge B\log\frac{M}{B}$ allora \[t\ge\frac{N\log\frac{N}{B}}{2\log \frac{N}{B}}=\Omega(N)\].
+\item Se $\log N \le B \log\frac{M}{B}$ dev'essere \[\displaystyle t \ge \frac{N \log \frac{N}{B}}{2B\log\frac{M}{B}}=\Omega\left(\frac{N}{B}\log_{\frac{M}{B}}\frac{N}{B}\right).\]
+\item Se invece $\log N \ge B\log\frac{M}{B}$ allora \[t\ge\frac{N\log\frac{N}{B}}{2\log N}\ge\frac{N\log N - N\log B}{2\log N} =\]\[= \frac12\left(N-N\frac{\log B}{\log N}\right)\ge\frac12(N-\frac12 N)=\Omega(N),\]il che ovviamente vale purché $\displaystyle\frac{\log B}{\log N}\le\frac12$, ossia $B\le \sqrt{N}$, relazione vera in tutti i casi di interesse.
 \end{itemize}
-Dall'unione dei due casi segue il lower-bound desiderato. 
+Dall'unione dei due casi segue il lower-bound desiderato.  
