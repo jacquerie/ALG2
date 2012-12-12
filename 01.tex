@@ -8,3 +8,23 @@
     di CPU. Analizzare il costo del merge (I/O complexity, CPU complexity)
     che utilizza tale \(k\)-way merge.
 \end{problem*}
+Date $k$ sequenze individualmente ordinate, il $k$-way merge mantiene in memoria principale $k$ buffer di input e un buffer di output, tutti di dimensione $B$. 
+\begin{algorithm}
+\caption{$k$-way merge in memoria esterna}
+\begin{algorithmic}[1]
+\State Inizializza ciascun buffer di input a contenere il primo blocco della corrispondente run. Marca quel buffer come attivo.
+\State Tra gli elementi ancora "inutilizzati" dei buffer di input, trova il più piccolo.
+\State Sposta tale elemento nella prima posizione libera del buffer di output.
+\State Se il buffer di output risulta pieno, svuotalo in memoria esterna e reinizializzalo.
+\State Se il buffer di input da cui ho prelevato l'elemento è giunto alla fine, leggi il prossimo blocco della run corrispondente. Se anche la run è terminata, marca quel buffer come inattivo. Se il numero di buffer ancora attivi è $>1$, torna al punto 2.
+\State Quando resta un solo buffer attivo, corrispondente a un'unica run attiva, copia quest'ultima in memoria esterna.
+\end{algorithmic}	
+\end{algorithm}
+\newline
+Il costo, in termini di operazioni di $I/O$, è chiaramente $O(\frac{N}{B})$; l'algoritmo ovviamente richiede che in memoria principale ci sia abbastanza spazio per tutte le run, ossia $k \le \frac{M}{B} - 1$.\newline
+Il costo di $CPU$ dipende interamente dal passo $2$ dell'algoritmo. Usando una selezione lineare per trovare il minimo si pagherebbe $O(k)$ ad ogni iterazione, per un totale di $O(k\cdot N)$; è preferibile allora usare una heap di minimo, con inserimento ed estrazione in tempo logaritmico. Così facendo ogni iterazione viene a costare $O(\log k)$, per un costo di CPU totale di $O(N\log k)$.
+\[\]
+Il $k$-way merge-sort prevede che ciascuna run abbia dimensione $M$, in modo che possa essere interamente ordinata in memoria principale: questo porta a scegliere $k=\left\lceil\frac{N}{M}\right\rceil$. Ovviamente questo è possibile solo se \[\left\lceil\frac{N}{M}\right\rceil + 1 \le \frac{M}{B},\] il che, dati i valori attualmente comuni per $M$ e $B$, risulta verificato per file di dimensioni fino a qualche TeraByte.\newline
+Per quanto riguarda gli I/O, ciascun elemento è interessato da due operazioni di input (una per l'ordinamento della run corrispondente, una per il $k$-way merge) e due di output (quando la run ordinata viene scritta in memoria esterna, e quando il buffer di output del $k$-way merge viene svuotato), il che porta ad un costo in termini di I/O di \[O\left(\frac{N}{B}\right).\] \newline
+Il costo di CPU è dato da $\frac{N}{M}$ ordinamenti di run, dal costo $O(M \log M)$ ciascuno, a cui va sommato il costo del $k$-way merge, che è $O(N\log\frac{N}{M})$. In totale si ottiene un costo CPU di \[O\left(N\log M + N\log\frac{N}{M}\right) = O\left(\max\left\{N\log M, N\log\frac{N}{M}\right\}\right).\]
+
