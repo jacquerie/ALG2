@@ -1,9 +1,77 @@
 \chapter{MapReduce}
 
 \begin{problem*}
-    Utilizzare il paradigma Scan \& Sort mediante la MapReduce per calcolare la
-    distribuzione dei gradi in ingresso delle pagine Web. In particolare, specificare
-    quanti passi di tipo MapReduce sono necessari e quali sono le funzioni Map e
-    Reduce impiegate. Ipotizzare di avere gi\`a tali pagine a disposizione.
+    Utilizzare il paradigma Scan \& Sort mediante la \mapreduce per calcolare la
+    distribuzione dei gradi in ingresso delle pagine Web. In particolare,
+    specificare quanti passi di tipo \mapreduce sono necessari e quali sono le
+    funzioni \map e \reduce impiegate. Ipotizzare di avere gi\`a tali pagine a
+    disposizione.
 \end{problem*}
 
+La prima cosa da fare è estrarre tutti i link nelle pagine Web. Definiamo una
+funzione \parser che presa una pagina web restituisce tutti i link presenti in
+essa. 
+
+\begin{algorithm}
+    \caption{Funzione Map - Creazione coppie dei link}
+    \begin{algorithmic}[1]
+        \Function {Map}{W}
+        	\For {each p in W}
+        		\State links \(\gets\) \parser(p)
+        		\For {each l in links}
+        			\State create \(\langle\mbox{l},1\rangle\)
+        		\EndFor
+        	\EndFor
+        \EndFunction
+    \end{algorithmic}
+\end{algorithm}
+
+La funzione \map prende la lista delle pagine  Web, estrae da ogni pagina tutti
+i suoi link e crea una coppia per ognuno di essi con associata la costante
+\(1\), la quale serve a indicare che è presente un link con quel
+identificativo.
+
+Prima di richiamare la funzione \reduce, per il paradigma \mapreduce, le
+coppie sono ordinate e suddivise per il campo chiave in modo tale da
+distribuire al meglio il carico di lavoro sulle macchine. 
+
+\begin{algorithm}
+    \caption{Funzione Reduce - Creazione coppie numero link}
+    \begin{algorithmic}[1]
+        \Function {Reduce}{key, list}
+      	  \State sum \(\gets 0\)
+        	\For {each p in list}
+        		\State sum++
+        	\EndFor
+        	\State create \(\langle\mbox{sum},1\rangle\)
+        \EndFunction
+    \end{algorithmic}
+\end{algorithm}
+
+
+Poiché le coppie sono state raggruppate per link, quando passiamo un gruppo
+alla funzione \reduce questa calcola il numero di link che ha quella pagina in
+ingresso. La funzione restituisce una coppia che indica che c'è una pagina che
+ha un certo numero di link in ingresso.
+
+Per ottenere la distribuzione dei gradi in ingresso delle pagine Web,
+applichiamo una nuova funzione \reduce alle coppie precedentemente create
+(prima della funzione le coppie sono ordinate e suddivise in gruppi come al
+passo precedente).
+
+\begin{algorithm}
+    \caption{Funzione Reduce - Creazione gradi in ingresso}
+    \begin{algorithmic}[1]
+        \Function {Reduce}{key, list}
+      	  \State sum \(\gets 0\)
+        	\For {each p in list}
+        		\State sum++
+        	\EndFor
+        	\State create \(\langle\mbox{key,sum}\rangle\)
+        \EndFunction
+    \end{algorithmic}
+\end{algorithm}
+
+In conclusione bisogna eseguire una \map per trovare i link presenti nelle
+pagine Web e due funzione \reduce, una per contare il numero di link che ha in
+ingresso una pagina e una per calcolare la distribuzione dei gradi in ingresso.

@@ -7,6 +7,7 @@
 \addto\captionsitalian{
     \renewcommand\chaptername{Problema}}
 
+\usepackage{xspace}
 \usepackage{enumerate}
 \usepackage{epigraph}
 \usepackage{fullpage}
@@ -37,9 +38,15 @@
 \newtheorem{lemma}{Lemma}
 \newtheorem*{proof*}{Dimostrazione}
 
-\newcommand{\quicksort}{\mbox{\sc Quicksort }}
-\newcommand{\mergesort}{\mbox{\sc Merge Sort }}
+\newcommand{\quicksort}{\textsc{Quicksort}\xspace}
+\newcommand{\mergesort}{\textsc{Merge Sort}\xspace}
 \newcommand{\vectornorm}[1]{\left|\left|#1\right|\right|}
+
+% Commands used throughout 05.tex
+\newcommand{\map}{\textsc{Map}\xspace}
+\newcommand{\reduce}{\textsc{Reduce}\xspace}
+\newcommand{\mapreduce}{\textsc{MapReduce}\xspace}
+\newcommand{\parser}{\textsc{Parser}\xspace}
 
 \begin{document}
     \title{Problemi di Algoritmica 2}
