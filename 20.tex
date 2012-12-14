@@ -1,0 +1,16 @@
+\chapter{Approssimazione per MIN-VC}
+
+\begin{problem*}
+    Il problema del MIN-VC (minimum vertex-cover) richiede,
+    per un grafo $G = (V, E)$, di trovare un sottoinsieme $S \subseteq V$ di cardinalità
+    minima tale che ogni arco sia incidente ad almeno un vertice di S, cioè
+    per ogni $(u, v)\in  E$ vale $u \in S$ oppure $v \in S$. Mostrare come il seguente approccio 
+    greedy fornisca una 2-approssimazione: inizializza $S$ all’insieme vuoto e, per ogni arco 
+    $(u, v) \in E$, se $u$ e $v$ non sono entrambi marcati, allora marcali e aggiungili a 
+    $S := S \cup \{u, v\}$; altrimenti, scarta l’arco.
+\end {problem*}
+
+Siano $A$ e $C$ gli insiemi rispettivamente di vertici e di archi selezionati dall'algoritmo; sia inoltre $C^*$ l'insieme di vertici nella soluzione ottima.\newline
+Chiaramente $C^*$ deve coprire gli archi di $A$, dunque deve contenere almeno un vertice per ogni arco in $A$; per di più due qualsiasi archi di $A$ non hanno vertici in comune, pertanto ciascun vertice di $C^*$ copre al più un arco di $A$, da cui \[|C^*|\ge|A|.\]
+Inoltre il nostro algoritmo seleziona un arco solo se nessuno dei due vertici sta già in $C$, dunque per ogni arco inserito in $A$ aggiunge due vertici a $C$, ossia \[|C|=2|A|.\]
+Unendo questi due risultati abbiamo che \[|C| = 2|A| \le 2|C^*|,\] come volevasi dimostrare.

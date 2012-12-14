@@ -1,0 +1,25 @@
+\chapter{Approssimazione per MAX-SAT}
+
+\begin{problem*}
+    Per il problema MAX-SAT della soddisfacibilità di una formula 
+    booleana, si consideri il seguente algoritmo di approssimazione 
+    per massimizzare il numero di clausole soddisfatte in una data 
+    formula: Sia $F$ la formula data, $x_1 , x_2 , \dots , x_n$ le
+    variabili booleane in essa contenute, e $c_1 , c_2 , \dots c_m$
+    le sue clausole. Scegli i valori booleani casuali $b_1 , b_2 , 
+    \dots, b_n$, ossia ciascun $b_i \in \{0, 1\}~(1 \le i \le n)$. 
+    Calcola il numero $m_0$ di clausole soddisfatte dall’assegnamento 
+    tale che $x_i := b_i~ (1 \le i \le n)$. Calcola il numero $m_1$ di
+    clausole soddisfatte dall’assegnamento tale che $x_i := \bar{b_i}~
+    (1 \le i \le n)$, dove $\bar{b_i}$ indica la negazione di $b_i$. 
+    Se $m_0 > m_1$, restituisci l’assegnamento $x_i := b_i ~(1 \le i 
+    \le n)$; altrimenti, restituisci l’assegnamento $x_i := \bar{b_i} 
+    ~(1 \le i \le n)$. Dimostrare che il suddetto algoritmo è una 
+    $r$-approssimazione per MAX-SAT, indicando anche il valore di $r > 1$
+    (e motivando l’utilizzo di tale valore). Discutere se, in generale, 
+    la scelta di $b1 , b2 , \dots , bn$ possa influenzare o meno il valore 
+    di $r$, motivando le argomentazioni addotte. Facoltativo: creare 
+    un’istanza di MAX-SAT in cui il suddetto algoritmo ottiene un costo che 
+    è r volte più piccolo del costo ottimo per una data scelta dei valori 
+    di $b_1 , b_2 \dots , b_n$.
+\end{problem*}

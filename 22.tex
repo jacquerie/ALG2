@@ -1,0 +1,19 @@
+\chapter{Approssimazione per MAX-CUT}
+
+\begin{problem*}
+    Il problema MAX-CUT è NP-hard ed è definito come segue per 
+    un grafo non orientato $G = (V, E)$. Una partizione di nodi $(C, V - C)$
+    con $C \in V$ si chiama “cut” o taglio. Un arco $e = (v, w)$ con $v \in C$
+    e $w \in V - C$ si chiama arco di taglio (ricordando che $(v, w)$ e $(w, v)$
+    denotano lo stesso arco in un grafo non orientato). Il numero di archi di 
+    taglio definisce la dimensione del cut $(C, V - C)$. Poiché cambiando taglio, 
+    può cambiare la sua dimensione, il problema richiede di trovare il taglio di 
+    dimensione massima e quindi gli archi di taglio corrispondenti. Dimostrare che 
+    il seguente algoritmo randomizzato è una 2-approssimazione in valore atteso, 
+    ossia che il numero medio di archi di taglio così individuati è in media almeno
+    la metà di quelli del taglio massimo. (1) Per ogni nodo $v \in V$ , lancia una 
+    moneta equiprobabile: se viene testa, inserisci $v$ in $C$; altrimenti (viene
+    croce), inserisci $v$ in $V - C$. (2) Inizializza $T$ all’insieme vuoto. Per 
+    ogni arco $(v, w) \in E$, tale che $v \in C$ e $w \in V - C$, aggiungi $(v, w)$
+    all’insieme $T$ . Restituisci $C$ e $T$ come soluzione approssimata.
+\end{problem*}
