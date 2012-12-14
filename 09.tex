@@ -2,8 +2,9 @@
 
 \begin{problem*}
     Mostrare che la famiglia di funzioni hash 
-    \(H = \left\{h(x) = ((ax + b ) \mod p) \mod m\right\}\) \`e (quasi) uniforme, dove 
-    \(a,b\in [m]\) con \(a\neq 0\) e \(p\) \`e un numero primo sufficientemente grande.
+    \(H = \left\{h(x) = ((ax + b ) \mod p) \mod m\right\}\) \`e (quasi) ``pairwise 
+    indipendent'', dove \(a,b\in [m]\) con \(a\neq 0\) e \(p\) \`e un numero primo 
+    sufficientemente grande.
 \end{problem*}
 Dobbiamo mostrare che, preso $h\in H$ e dati $k\neq l$ chiavi, $u, v$ valori, vale \[\Pr[h(k)=u \wedge h(l)=v]\approx\Pr[h(k)=u]\cdot\Pr[h(l)=v.]\] Mostreremo che $\Pr[h(k)=u]\approx\Pr[h(l)=v]\approx\frac{1}{m}$ e che $\Pr[h(k)=u \wedge h(l)=v]\approx\frac{1}{m^2}$.
 \[\]
