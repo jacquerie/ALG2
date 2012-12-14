@@ -17,3 +17,6 @@
     ogni arco $(v, w) \in E$, tale che $v \in C$ e $w \in V - C$, aggiungi $(v, w)$
     all’insieme $T$ . Restituisci $C$ e $T$ come soluzione approssimata.
 \end{problem*} 
+Definiamo la variabile indicatrice $X_{(u,v)}$ che vale $1$ se l'arco $(u,v)$ appartiene a $T$, $0$ altrimenti. Allora \[\Pr[X_{(u,v)}=1]=\Pr[u \in C \wedge v\in V-C] + \Pr[u\in V-C \wedge v\in C] = \frac12,\] da cui $\mathbb{E}[X_{(u,v)}]=\frac12$.\newline
+Definiamo poi $\displaystyle X = \sum_{(u, v)\in E}X_{(u, v)}$. Allora \[\mathbb{E}[X]=\sum_{(u, v)\in E}\mathbb{E}[X_{(u, v)}]=\frac12|E|.\]
+Detto $T^*$ il taglio ottimo, si ha ovviamente che $|T^*|\le|E|$, da cui \[\mathbb{E}[|T|]=\mathbb{E}[X]=\frac12|E|\ge\frac12|T^*|,\]come volevasi dimostrare. 
