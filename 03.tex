@@ -1,14 +1,14 @@
 \chapter{Permutazione in memoria esterna}
 
 \begin{problem*}
-    Dati tre array \(A, B\) e \(C\) di \(N\) elementi, dove \(A\) \`e l'input e 
+    Dati tre array \(A, C\) e \(D\) di \(N\) elementi, dove \(A\) \`e l'input e 
     \(C\) una permutazione di \(\left\{0,1,\dots ,n-1\right\}\), descrivere e
     analizzare nel modello EMM un algoritmo ottimo per costruire
-    \(B[i]=A[C[i]]\) per \(0\le i\le n-1\).
+    \(D[i]=A[C[i]]\) per \(0\le i\le n-1\).
 \end{problem*}
 
 Dall'analisi svolta sul Lower Bound della permutazione, sappiamo che il costo di
-I/O è dato da \(=(\min\{n, \sort(n)\})\), dove \(\sort(n) =
+I/O è dato da \(\min\{n, \sort(n)\}\), dove \(\sort(n) =
 O\left(\frac{N}{B}log_\frac{N}{M} \frac{N}{B}\right)\).
  
 \begin{algorithm}
@@ -31,7 +31,7 @@ ad esempio quando la dimensione \(B\) del blocco è molto piccola. Di seguito
         \State Ordina le coppie in base alla seconda componente (l'indice di permutazione).
         \State Sostituisci nelle coppie \(C[i]\) con \(A[C[i]]\).
         \State Ordina le coppie per la prima componente.
-        \State Scrivi nel vettore \(B\) le seconde componenti delle coppie.
+        \State Scrivi nel vettore \(D\) le seconde componenti delle coppie.
     \end{algorithmic}	
 \end{algorithm}
 
@@ -51,5 +51,5 @@ Analizziamo il costo dei singoli passi dell'algoritmo:
     sono letti e scritti \(N\) sequenzialmente.
 \end{itemize}
 
-In conclusione il costo di \(I/O\) dell'algoritmo appena esposto è
+In conclusione il costo di I/O dell'algoritmo appena esposto è
 \(O\left(\frac{N}{B}log_\frac{N}{M} \frac{N}{B}\right)\).
