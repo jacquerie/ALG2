@@ -5,9 +5,12 @@
     \(H = \left\{h(x) = ((ax + b ) \mod p) \mod m\right\}\) \`e (quasi) uniforme, dove 
     \(a,b\in [m]\) con \(a\neq 0\) e \(p\) \`e un numero primo sufficientemente grande.
 \end{problem*}
-Siano $k\neq l$ due chiavi, $h\in H$ e $r=ak+b \pmod p$, $s=al+b\pmod p$. Abbiamo che $r-s = a(k-l) \pmod p$ da cui, essendo $a\neq0$ e, per $p$ sufficientemente grande, $(k-l)\neq 0 \pmod p$, segue che $r-s\neq0$.\newline
-È dunque possibile una collisione tra gli hash delle due chiavi se e solo se $r \pmod m = s \pmod m$.\newline
-Notiamo che per $a$ sono possibili $p-1$ valori (lo $0$ non va bene) mentre per $b$ ve ne sono $p$: in tutto abbiamo $p(p-1)$ possibili coppie $(a, b)$; ma anche per $(r, s)$ vi sono $p(p-1)$ possibilità (fissato $r$, per $s$ vanno bene tutti i valori tranne quello assunto da $r$): segue che le coppie $(a, b)$ e le coppie $(r, s)$ possono essere messe in corrispondenza biunivoca. Inoltre se la coppia $(a, b)$ è scelta a caso con probabilità uniforme ciascuna coppia $(r, s)$ ha la stessa probabilità di essere l'immagine di due date chiavi $l$ e $k$. Questo significa che \[\Pr[~h(k)=h(l)~]=\Pr[~r = s \pmod m].\]
-Fissiamo $r$: i possibili valori per $s$ che originano una "collisione" sono al più \[\left\lceil \frac{p}{m} \right\rceil-1 \le \frac{p+m-1}{m} - 1= \frac{p-1}{m}.\]
-Da questo segue che \[\Pr[~r=s\pmod m] \le \frac{\frac{p-1}{m}}{p-1}=\frac{1}{m},\] il che significa \[\Pr[h(k)=h(l)]\le\frac{1}{m},\] come volevasi dimostrare.
+Dobbiamo mostrare che, preso $h\in H$ e dati $k\neq l$ chiavi, $u, v$ valori, vale \[\Pr[h(k)=u \wedge h(l)=v]\approx\Pr[h(k)=u]\cdot\Pr[h(l)=v.]\] Mostreremo che $\Pr[h(k)=u]\approx\Pr[h(l)=v]\approx\frac{1}{m}$ e che $\Pr[h(k)=u \wedge h(l)=v]\approx\frac{1}{m^2}$.
+\[\]
+Contiamo anzitutto quante sono le chiavi $k$ tali che $h(k)=u$ per un certo valore $u$.\newline
+Dato un generico $r$, l'equazione $ax+b=r \pmod p$ ha un'unica soluzione $x$ in $[p]$ in quando $a\neq0$ è sicuramente invertibile. Questo significa che esiste un unico $k$ tale che $ak+b=r \pmod p$.\newline
+Se vogliamo inoltre che $r = u \pmod m$, le scelte possibili per $r$ sono almeno $\left\lfloor\frac{p}{m}\right\rfloor$ e al più $\left\lceil \frac{p}{m}\right\rceil$.\newline
+Pertanto, dato $u$, se chiamiamo $t$ il numero di possibili valori per $k$ tali che $h(k)=u$, abbiamo $\left\lfloor\frac{p}{m}\right\rfloor\le t \le \left\lceil \frac{p}{m}\right\rceil$, ossia \[\frac{\left\lfloor\frac{p}{m}\right\rfloor}{p}\le\Pr[h(k)=u]\le\frac{\left\lceil \frac{p}{m}\right\rceil}{p},\] da cui \[\Pr[h(k)=u]\approx\frac{1}{m}.\]
+\[\]
+Consideriamo ora $\Pr[h(k)=u \wedge h(l)=v]$. Se vogliamo che $h(k)=u$ sono possibili per $k$ $t$ valori distinti, con $t$ come sopra, e altrettanti per $l$ affinché sia $h(l)=v$. In totale le coppie $(k, l)$ possibili sono $p(p-1)$, essendo $h\neq k$, da cui \[\frac{\left(\left\lfloor\frac{p}{m}\right\rfloor\right)^2}{p(p-1)}\le \Pr[h(k)=u \wedge h(l)=v]\le\frac{\left(\left\lceil \frac{p}{m}\right\rceil\right)^2}{p(p-1)},\] da cui \[\Pr[h(k)=u \wedge h(l)=v]\approx\frac{1}{m^2},\] come volevasi dimostrare.
 
