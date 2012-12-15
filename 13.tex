@@ -5,3 +5,48 @@
     approssimare il numero di elementi distinti.
 \end{problem*}
 
+Cominciamo fissando le notazioni usate nel seguito. Sia \(\chi = x_1 x_2
+\dots x_n\) uno stream di \(n\) caratteri scelti da un insieme di cardinalit\`a
+\(m\le n\) di simboli distinti. Denotiamo con \(D(\chi)\) il numero di elementi
+distinti effettivamente presenti nello stream.
+
+Per prima cosa risolviamo un problema pi\`u semplice: dato un numero \(t\)
+vogliamo decidere con alta probabili\`a se \(D(\chi) \gg t\) oppure \(D(\chi) \ll
+t\). Pi\`u precisamente vogliamo risolvere il seguente
+\begin{problem*}
+  Data una soglia \(t\) e uno stream \(\chi\), rispondere
+  \begin{itemize}
+    \item S\`i se \(D(\chi)\ge t\),
+    \item No se \(D(\chi)<\frac{t}{2}\),
+    \item indifferentemente S\`i o No altrimenti,
+  \end{itemize}
+  con probabilit\`a maggiore di \(\delta\) di essere corretto.
+\end{problem*}
+
+Supponiamo di avere una funzione hash \(h:X\rightarrow [1,t]\) ideale, tale
+cio\`e che \(\forall i\mbox{, }Pr[h(x) = i] = \frac{1}{t}\). In termini di
+questa funzione siamo quasi in grado di risolvere il precedente problema.
+Abbiamo infatti il seguente
+\begin{algorithm}
+  \caption{Contatore con rumore}
+  \begin{algorithmic}[1]
+    \For {each \(x_i\in X\) do}
+      \If {\(h(x_i) = t\)}
+        \State \Return {S\`i}
+      \EndIf
+    \EndFor
+    \State \Return {No}
+  \end{algorithmic}
+\end{algorithm}
+
+\begin{lemma}
+  Supponiamo che \(D(\chi)\ge t\) o \(D(\chi)<\frac{t}{2}\). Allora il precedente
+  algoritmo \`e corretto con probabilit\`a maggiore di \(0.6\).
+\end{lemma}
+\begin{proof}
+  \begin{itemize}
+    \item Supponiamo \(D(\chi)\ge t\). TODO
+    \item Supponiamo invece \(D(\chi)<\frac{t}{2}\). TODO
+  \end{itemize}
+\end{proof}
+
