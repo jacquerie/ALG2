@@ -20,7 +20,7 @@ t\). Pi\`u precisamente vogliamo risolvere il seguente
     \item No se \(D(\chi)<\frac{t}{2}\),
     \item indifferentemente S\`i o No altrimenti,
   \end{itemize}
-  con probabilit\`a maggiore di \(\delta\) di essere corretto.
+  con probabilit\`a maggiore di \(1 - \delta\) di essere corretto.
 \end{problem*}
 
 Supponiamo di avere una funzione hash \(h:X\rightarrow [1,t]\) ideale, tale
@@ -48,5 +48,26 @@ Abbiamo infatti il seguente
     \item Supponiamo \(D(\chi)\ge t\). TODO
     \item Supponiamo invece \(D(\chi)<\frac{t}{2}\). TODO
   \end{itemize}
+\end{proof}
+
+Abbiamo quindi un modo per ottenere una risposta corretta in pi\`u del \(60\%\)
+dei casi. Possiamo superare qualunque soglia di confidenza semplicemente
+ripetendo abbastanza volte il precedente algoritmo e scegliendo il risultato
+ottenuto pi\`u frequentemente. Sia dunque \(H = \left\{h_j | j\in[m]\right\{\) una
+famiglia di funzioni hash ideali e indipendenti.
+\begin{algorithm}
+  \caption{}
+  \begin{algorithmic}[1]
+    \For {each \(h_j\in H\) do}
+      \State \,
+    \EndFor
+  \end{algorithmic}
+\end{algorithm}
+
+\begin{lemma}
+  TODO
+\end{lemma}
+\begin{proof}
+  TODO
 \end{proof}
 
