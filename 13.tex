@@ -13,7 +13,7 @@ distinti effettivamente presenti nello stream.
 Per prima cosa risolviamo un problema pi\`u semplice: dato un numero \(t\)
 vogliamo decidere con alta probabili\`a se \(D(\chi) \gg t\) oppure \(D(\chi) \ll
 t\). Pi\`u precisamente vogliamo risolvere il seguente
-\begin{problem*}
+\begin{problem*}[Semplificato]
   Data una soglia \(t\) e uno stream \(\chi\), rispondere
   \begin{itemize}
     \item ``S\`i'' se \(D(\chi)\ge t\),
@@ -81,7 +81,7 @@ abbastanza volte il precedente algoritmo e scegliendo il risultato ottenuto pi\`
 frequentemente. Sia dunque \(H = \left\{h_j\,|\,j\in[k]\right\}\)  una famiglia
 di funzioni hash ideali e indipendenti.
 \begin{algorithm}
-  \caption{TODO}
+  \caption{Referendum di \textsc{NoisyCounter}}
   \begin{algorithmic}[1]
     \State {yes\_votes = 0}
     \For {each \(h_j\in H\)}
@@ -97,7 +97,8 @@ di funzioni hash ideali e indipendenti.
 \end{algorithm}
 
 \begin{lemma}
-  TODO
+  \(\forall\,\delta>0\), il precedente algoritmo risolve il problema semplificato
+  con probabilit\`a di essere corretto \(1-\delta\).
 \end{lemma}
 \begin{proof}
   Sia \(Z_i\) l'indicatrice dell'evento \(\{\textsc{NoisyCounter}(h_j)=\mbox{``S\`i''}\}\).
