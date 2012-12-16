@@ -77,9 +77,9 @@ Abbiamo infatti il seguente
 \end{proof}
 
 Possiamo superare qualunque soglia di confidenza semplicemente ripetendo
-abbastanza volte il precedente algoritmo e scegliendo il risultato ottenuto pi\`u
-frequentemente. Sia dunque \(H = \left\{h_j\,|\,j\in[k]\right\}\)  una famiglia
-di funzioni hash ideali e indipendenti.
+abbastanza volte il precedente algoritmo e scegliendo il risultato ottenuto 
+pi\`u frequentemente. Sia dunque \(H = \left\{h_j\,|\,j\in[k]\right\}\) una 
+famiglia di funzioni hash ideali e indipendenti.
 \begin{algorithm}
   \caption{Referendum di \textsc{NoisyCounter}}
   \begin{algorithmic}[1]
@@ -97,24 +97,40 @@ di funzioni hash ideali e indipendenti.
 \end{algorithm}
 
 \begin{lemma}
-  \(\forall\,\delta>0\), il precedente algoritmo risolve il problema semplificato
-  con probabilit\`a di essere corretto \(1-\delta\).
+  \(\forall\,\delta>0\), il precedente algoritmo risolve il problema
+  semplificato con probabilit\`a di essere corretto \(1-\delta\).
 \end{lemma}
 \begin{proof}
   Sia \(Z_i\) l'indicatrice dell'evento \(\{\textsc{NoisyCounter}(h_j)=\mbox{``S\`i''}\}\).
-  Il precedente lemma garantisce che \(\mbox{Pr}[Z_i]\ge 0.6\). Sia allora \(Z=
+  Il precedente lemma garantisce che \(\Pr[Z_i]\ge 0.6\). Sia allora \(Z=
   \sum_{i=1}^k{Z_i}\). Osserviamo che dalla linearit\`a della speranza segue 
   immediatamente che \(\E[Z]\ge 0.6k\). Di conseguenza abbiamo:
-  \[\mbox{Pr}\left[Z\le\frac{k}{2}\right]\le\mbox{Pr}\left[Z\le\frac{0.5}{0.6}
+  \[\Pr\left[Z\le\frac{k}{2}\right]\le\Pr\left[Z\le\frac{0.5}{0.6}
   \E[Z]\right]\mbox{.}\]
   Possiamo maggiorare il membro di destra con una delle disuguaglianze di
   Chernoff, cio\`e:
-  \[\mbox{Pr}[Z\le(1-\xi)\E[Z]]\le\exp{\left(-\frac{\E[Z]\cdot\xi^2}{2}\right)}\mbox{.}\]
-  Abbiamo dunque, ponendo \(1-\xi = \frac{0.5}{0.6}\), che:
-  \[\mbox{Pr}\left[Z\le\frac{k}{2}\right]\le\exp{\left(-\frac{0.6 k\cdot{\frac{0.1}{0.6}}^2}{2}\right)}\mbox{,}\]
-  perci\`o possiamo rendere arbitrariamente  piccola la probabilit\`a di rispondere
-  ``No''. Di conseguenza, ragionando come nella dimostrazione del precedente lemma,
-  possiamo ottenere un algoritmo corretto con probabilit\`a \(1-\delta\) scegliendo
-  \(k = O\left(\log{\frac{1}{\delta}}\right)\).
+  \[\mbox{Pr}[Z\le(1-\xi)\E[Z]]\le\exp{\left(-\frac{\E[Z]\cdot\xi^2}{2}
+  \right)}\mbox{.}\] Abbiamo dunque, ponendo \(1-\xi = \frac{0.5}{0.6}\), che:
+  \[Pr\left[Z\le\frac{k}{2}\right]\le\exp{\left(-\frac{0.6 
+  k\cdot{\frac{0.1}{0.6}}^2}{2}\right)}\mbox{,}\] perci\`o possiamo rendere 
+  arbitrariamente  piccola la probabilit\`a di rispondere ``No''. Di conseguenza, 
+  ragionando come nella dimostrazione del precedente lemma, possiamo ottenere un 
+  algoritmo corretto con probabilit\`a \(1-\delta\) scegliendo \(k = 
+  O\left(\log{\frac{1}{\delta}}\right)\).
 \end{proof}
 
+Dalla soluzione del problema semplificato ricaviamo una soluzione del problema
+originario scegliendo come soglie le potenze di due pi\`u piccole di \(n\). 
+
+Fissiamo \(\delta > 0\). Poich\'e basta soltanto un bit per memorizzare 
+l'informazione ``\`e stata superata l'\(i\)-esima soglia'', \`e sufficiente 
+inizializzare \(\log{n}\) bit a zero corrispondenti alle potenze di due in ordine
+cresecente e scegliere \(k\) funzioni hash ideali e indipendenti in modo che \(k 
+= O\left(\log{\frac{1}{\delta}}\right)\). Consumiamo uno a uno i caratteri dello 
+stream \(\chi\) e aggiorniamo con il precedente algoritmo tutti i bit 
+corrispondenti alle soglie; al termine dello stream ritorniamo l'indice \(p\) del 
+bit pi\`u a sinistra impostato a \(0\).
+
+L'analisi fin qui effettuata garantisce allora che il numero di elementi distinti 
+\(D(\chi)\) sia compreso fra \(2^{p-1}\) e \(2^p\) con probabilit\`a maggiore di
+\(1-\delta\).
