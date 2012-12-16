@@ -13,7 +13,7 @@ caratteri speciali \texttt{\$} in fondo alla stringa, ottenendo
 ogni carattere con il proprio rango nell'ordine alfabetico dei caratteri della 
 stringa stessa, con la convenzione che il carattere \texttt{\$} precede ogni altro 
 carattere. Otteniamo dunque:
-\begin{table}[h]
+\begin{table}[H]
   \begin{tabularx}{\linewidth}{l*{14}{X}}
     Carattere              & \texttt{a} & \texttt{b} & \texttt{r} & \texttt{a}
                            & \texttt{c} & \texttt{a} & \texttt{d} & \texttt{a}
@@ -28,7 +28,7 @@ carattere. Otteniamo dunque:
 Dividiamo i caratteri in \(3\) gruppi secondo la congruenza modulo \(3\) della 
 posizione nella stringa. Assegnamo rispettivamente i colori verde, rosso e giallo 
 alle \(3\) classi di congruenza:
-\begin{table}[h]
+\begin{table}[H]
   \begin{tabularx}{\linewidth}{l*{14}{X}}
     Carattere              & \texttt{a} & \texttt{b} & \texttt{r} & \texttt{a}
                            & \texttt{c} & \texttt{a} & \texttt{d} & \texttt{a}
@@ -45,10 +45,10 @@ alle \(3\) classi di congruenza:
 \end{table}
 
 Trascuriamo per il momento il gruppo verde e sostituiamo ogni carattere di indice 
-\(i\) dei gruppi giallo e rosso con la tripla dei caratteri di indice \(i, i+1\) e 
-\(i+2\). Riordiniamo inoltre la tabella secondo la divisione in colori,
+\(i\) dei gruppi giallo e rosso con la tripla dei caratteri di indice \(i, i+1\) 
+e \(i+2\). Riordiniamo inoltre la tabella secondo la divisione in colori,
 tralasciando le triple che cominciano per il simbolo \texttt{\$}:
-\begin{table}[h]
+\begin{table}[H]
   \begin{tabularx}{\linewidth}{l*{11}{X}}
                         & \multicolumn{4}{c}{Gruppo 0 \cellcolor{green} } 
                         & \multicolumn{4}{c}{Gruppo 1 \cellcolor{red} } 
@@ -69,10 +69,10 @@ tralasciando le triple che cominciano per il simbolo \texttt{\$}:
 \newpage
 
 Ordiniamo ora le colonne dei gruppi \(1\) e \(2\) secondo le triple dei ranghi con
-\(3\) passaggi di \radixsort. Da questo ordinamento ricaviamo i ranghi delle 
-triple, cio\`e la loro posizione nell'ordinamento lessicografico delle
-corrispondenti triple di caratteri:
-\begin{table}[h]
+\(3\) passaggi di \radixsort. Da ci\`o ricaviamo i ranghi delle triple, cio\`e la 
+loro posizione nell'ordinamento lessicografico delle corrispondenti triple di 
+caratteri:
+\begin{table}[H]
   \begin{tabularx}{\linewidth}{l*{11}{X}}
                         & \multicolumn{4}{c}{Gruppo 0 \cellcolor{green} } 
                         & \multicolumn{7}{c}{Gruppi 1 \& 2\cellcolor{orange} } \\
@@ -94,9 +94,10 @@ corrispondenti triple di caratteri:
 
 Esistono due triple con lo stesso rango. Dobbiamo quindi ripetere ricorsivamente
 l'algoritmo \dc sulle triple di caratteri dei gruppi \(1\) e \(2\). Omettiamo
-questo passaggio per brevit\`a e scriviamo direttamente l'indice nel Suffix Array
-della corrispondente tripla di caratteri:
-\begin{table}[h]
+questo passaggio per brevit\`a e scriviamo direttamente l'indice provvisorio nel 
+Suffix Array della corrispondente tripla di caratteri. Infine ripristiniamo la 
+divisione in colori:
+\begin{table}[H]
   \begin{tabularx}{\linewidth}{l*{11}{X}}
                         & \multicolumn{4}{c}{Gruppo 0 \cellcolor{green} } 
                         & \multicolumn{4}{c}{Gruppo 1 \cellcolor{red} } 
@@ -111,9 +112,125 @@ della corrispondente tripla di caratteri:
     Indice del suffisso & \multicolumn{4}{c}{\cellcolor{gray!25}}
                         & 1 & 4 & 7 & 10
                         & 2 & 5 & 8 \\
-    Indice nel Suffix Array & \multicolumn{4}{c}{\cellcolor{gray!25}}
-                        & \textbf{4} & \textbf{5} & \textbf{1} & \textbf{0}
-                        & \textbf{6} & \textbf{2} & \textbf{3} \\
+    Indice provv. nel SA & \multicolumn{4}{c}{\cellcolor{gray!25}}
+                        & \textbf{5} & \textbf{6} & \textbf{2} & \textbf{1}
+                        & \textbf{7} & \textbf{3} & \textbf{4} \\
   \end{tabularx}
 \end{table}
 
+Rappresentiamo ogni carattere di indice \(i\) del gruppo \(0\) con la coppia 
+costituita dal carattere stesso e dall'indice provvisorio nel Suffix Array del 
+carattere di indice \(i+1\), che conosciamo poich\'e \(i+1\) \`e congruo a \(1\) modulo \(3\).
+Abbiamo dunque:
+\begin{table}[H]
+  \begin{tabularx}{\linewidth}{l*{11}{X}}
+                        & \multicolumn{4}{c}{Gruppo 0 \cellcolor{green} } 
+                        & \multicolumn{4}{c}{Gruppo 1 \cellcolor{red} } 
+                        & \multicolumn{3}{c}{Gruppo 2 \cellcolor{yellow} }\\
+    \hline
+    Carattere           & \texttt{a} & \texttt{a} & \texttt{d} & \texttt{r}
+                        & \multicolumn{4}{c}{\cellcolor{gray!25}}
+                        & \multicolumn{3}{c}{\cellcolor{gray!25}} \\
+    Indice del suffisso & 0 & 3 & 6 & 9
+                        & 1 & 4 & 7 & 10
+                        & \multicolumn{3}{c}{\cellcolor{gray!25}} \\
+    Indice provv. nel SA & \multicolumn{4}{c}{\cellcolor{gray!25}}
+                        & \textbf{5} & \textbf{6} & \textbf{2} & \textbf{1}
+                        & \multicolumn{3}{c}{\cellcolor{gray!25}} \\
+    Coppie associate    & (\texttt{a},\textbf{5}) & (\texttt{a},\textbf{6})
+                        & (\texttt{d},\textbf{2}) & (\texttt{r},\textbf{1})
+                        & \multicolumn{4}{c}{\cellcolor{gray!25}}
+                        & \multicolumn{3}{c}{\cellcolor{gray!25}} \\
+
+  \end{tabularx}
+\end{table}
+
+Ordiniamo le colonne del gruppo \(0\) con \(2\) passaggi di \radixsort
+(nell'esempio risultano gi\`a ordinate). Otteniamo dunque un indice provvisorio
+nel Suffix Array anche per gli elementi verdi, che rappresentiamo in blu:
+\begin{table}[H]
+  \begin{tabularx}{\linewidth}{l*{11}{X}}
+                        & \multicolumn{4}{c}{Gruppo 0 \cellcolor{green} } 
+                        & \multicolumn{4}{c}{Gruppo 1 \cellcolor{red} } 
+                        & \multicolumn{3}{c}{Gruppo 2 \cellcolor{yellow} }\\
+    \hline
+    Carattere           & \texttt{a} & \texttt{a} & \texttt{d} & \texttt{r}
+                        & \texttt{b} & \texttt{c} & \texttt{a} & \texttt{a}
+                        & \texttt{r} & \texttt{a} & \texttt{b} \\
+    Indice del suffisso & 0 & 3 & 6 & 9
+                        & 1 & 4 & 7 & 10
+                        & 2 & 5 & 8 \\
+    Indice provv. nel SA & \textcolor{blue}{\textbf{1}} 
+                              & \textcolor{blue}{\textbf{2}} 
+                              & \textcolor{blue}{\textbf{3}}
+                              & \textcolor{blue}{\textbf{4}}
+                        & \textbf{5} & \textbf{6} & \textbf{2} & \textbf{1}
+                        & \textbf{7} & \textbf{3} & \textbf{4} \\
+  \end{tabularx}
+\end{table}
+
+\newpage
+
+Calcoliamo ora per ogni carattere di indice \(i\) nei gruppi \(0\) e \(1\) la 
+coppia costituita da quel carattere e dall'indice provvisorio nel Suffix Array
+del carattere di indice \(i+1\). Calcoliamo inoltre per ogni carattere di indice 
+\(i\) nei gruppi \(0\) e \(2\) la tripla costituita da quel carattere, il 
+successivo e l'indice provvisorio nel Suffix Array del carattere di indice 
+\(i+2\). Se l'indice richiesto non esiste usiamo al suo posto \(\textbf{0}\).
+\begin{table}[H]
+  \begin{tabularx}{\linewidth}{l*{11}{X}}
+                        & \multicolumn{4}{c}{Gruppo 0 \cellcolor{green} } 
+                        & \multicolumn{4}{c}{Gruppo 1 \cellcolor{red} } 
+                        & \multicolumn{3}{c}{Gruppo 2 \cellcolor{yellow} }\\
+    \hline
+    Carattere           & \texttt{a} & \texttt{a} & \texttt{d} & \texttt{r}
+                        & \texttt{b} & \texttt{c} & \texttt{a} & \texttt{a}
+                        & \texttt{r} & \texttt{a} & \texttt{b} \\
+    Ind. del suffisso   & 0 & 3 & 6 & 9
+                        & 1 & 4 & 7 & 10
+                        & 2 & 5 & 8 \\
+    Ind. p. nel SA      & \textcolor{blue}{\textbf{1}} 
+                        & \textcolor{blue}{\textbf{2}} 
+                        & \textcolor{blue}{\textbf{3}}
+                        & \textcolor{blue}{\textbf{4}}
+                        & \textbf{5} & \textbf{6} & \textbf{2} & \textbf{1}
+                        & \textbf{7} & \textbf{3} & \textbf{4} \\
+
+    Coppie associata    & \texttt{a},\textbf{5} & \texttt{a},\textbf{6}
+                        & \texttt{d},\textbf{2} & \texttt{r},\textbf{1}
+                        & \texttt{b},\textbf{7} & \texttt{c},\textbf{3}
+                        & \texttt{a},\textbf{4} & \texttt{a},\textbf{0}
+                        & \multicolumn{3}{c}{\cellcolor{gray!25}} \\
+    Triple associata    & \texttt{a},\texttt{b},\textbf{7}
+                        & \texttt{a},\texttt{c},\textbf{3}
+                        & \texttt{d},\texttt{a},\textbf{4} 
+                        & \texttt{r},\texttt{a},\textbf{0}
+                        & \multicolumn{4}{c}{\cellcolor{gray!25}}
+                        & \texttt{r},\texttt{a},\textbf{6}
+                        & \texttt{a},\texttt{d},\textbf{2}
+                        & \texttt{b},\texttt{r},\textbf{1} \\
+  \end{tabularx}
+\end{table}
+
+Andiamo infine a fondere i due Suffix Array provvisori con l'usuale algoritmo di
+fusione di due liste ordinate. Quando confrontiamo elementi dei gruppi \(0\) e 
+\(1\) usiamo l'ordine lessicografico sulle coppie associate, e analogamente 
+l'ordine lessicografico sulle triple associate per confrontare elementi dei gruppi
+\(0\) e \(2\). Otteniamo infine:
+\begin{table}[H]
+  \begin{tabularx}{\linewidth}{l*{11}{X}}
+    Carattere              & \texttt{a} & \texttt{b} & \texttt{r} & \texttt{a}
+                           & \texttt{c} & \texttt{a} & \texttt{d} & \texttt{a}
+                           & \texttt{b} & \texttt{r} & \texttt{a} \\
+    \hline
+    Ind. del suffisso      & 0 & 1 & 2 & 3
+                           & 4 & 5 & 6 & 7
+                           & 8 & 9 & 10 \\
+    Indice nel SA          & 3 & 7 & 11 & 4
+                           & 8 & 5 & 9 & 2
+                           & 6 & 10 & 1 \\
+  \end{tabularx}
+\end{table}
+pertanto il Suffix Array di \texttt{\string"abracadabra\string"} \`e 
+\([\mathbf{10},\mathbf{7},\mathbf{0},\mathbf{3},\mathbf{5},\mathbf{8},\mathbf{1},
+\mathbf{4},\mathbf{6},\mathbf{9},\mathbf{2}]\).
