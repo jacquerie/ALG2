@@ -1,8 +1,62 @@
 \chapter{Suffix array in memoria esterna}
 
 \begin{problem*}
-    Utilizzando la costruzione del suffix array basata sul \mergesort e la tecnica
-    DC3 vista a lezione, progettare un algoritmo per EMM per costruire il suffix
-    array di un testo che abbia la stessa complessit\`a del \mergesort in EMM.
+  Utilizzando la costruzione del suffix array basata sul \mergesort e la tecnica
+  \dc vista a lezione, progettare un algoritmo per EMM per costruire il suffix
+  array di un testo che abbia la stessa complessit\`a del \mergesort in EMM.
 \end{problem*}
 
+Diamo di seguito un esempio di applicazione dell'algoritmo \dc alla stringa
+\texttt{\string"abracadabra\string"}. Per ragioni tecniche aggiungiamo tre 
+caratteri speciali \texttt{\$} in fondo alla stringa, ottenendo 
+\texttt{\string"abracadabra\$\$\$\string"}. Scandiamo la stringa e sostituiamo 
+ogni carattere con il proprio rango nell'ordine alfabetico dei caratteri della 
+stringa stessa, con la convenzione che il carattere \texttt{\$} precede ogni altro 
+carattere. Otteniamo dunque:
+\begin{table}[h]
+  \begin{tabular}{l*{14}{c}r}
+    Carattere              & \texttt{a} & \texttt{b} & \texttt{r} & \texttt{a}
+                           & \texttt{c} & \texttt{a} & \texttt{d} & \texttt{a}
+                           & \texttt{b} & \texttt{r} & \texttt{a} & \texttt{\$}
+                           & \texttt{\$} & \texttt{\$} \\
+    \hline
+    Rango del carattere    & 1 & 2 & 5 & 1 & 3 & 1 & 4 & 1 & 2 & 5 & 1 & 0 & 0 & 0 \\
+    Indice del suffisso    & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13 \\
+  \end{tabular}
+\end{table}
+
+Dividiamo i caratteri in \(3\) gruppi secondo la congruenza modulo \(3\) della 
+posizione nella stringa. Assegnamo rispettivamente i colori verde, rosso e giallo 
+alle \(3\) classi di congruenza:
+\begin{table}[h]
+  \begin{tabular}{l*{14}{c}r}
+    Carattere              & \texttt{a} & \texttt{b} & \texttt{r} & \texttt{a}
+                           & \texttt{c} & \texttt{a} & \texttt{d} & \texttt{a}
+                           & \texttt{b} & \texttt{r} & \texttt{a} & \texttt{\$}
+                           & \texttt{\$} & \texttt{\$} \\
+    \hline
+    Rango del carattere    & 1 & 2 & 5 & 1 & 3 & 1 & 4 & 1 & 2 & 5 & 1 & 0 & 0 & 0 \\
+    Indice del suffisso    & 0 \cellcolor{green} & 1 \cellcolor{red} & 2 \cellcolor{yellow} 
+                           & 3 \cellcolor{green} & 4 \cellcolor{red} & 5 \cellcolor{yellow} 
+                           & 6 \cellcolor{green} & 7 \cellcolor{red} & 8 \cellcolor{yellow} 
+                           & 9 \cellcolor{green} & 10 \cellcolor{red} & 11 \cellcolor{yellow} 
+                           & 12 \cellcolor{green} & 13 \cellcolor{red} \\
+  \end{tabular}
+\end{table}
+
+Trascuriamo per il momento il gruppo verde e sostituiamo ogni carattere di indice 
+\(i\) dei gruppi giallo e rosso con la tripla dei caratteri di indice \(i, i+1\) e 
+\(i+2\). Riordiniamo inoltre la tabella secondo la divisione in colori,
+tralasciando le triple che cominciano per il simbolo \texttt{\$}:
+\begin{table}[h]
+  \begin{tabular}{l*{12}{c}r}
+                        & \multicolumn{4}{c}{Gruppo 0 \cellcolor{green} } 
+                        & \multicolumn{4}{c}{Gruppo 1 \cellcolor{red} } 
+                        & \multicolumn{4}{c}{Gruppo 2 \cellcolor{yellow} }\\
+    \hline
+    Caratteri           & \multicolumn{12}{c}{} \\
+    Indice del suffisso & & & &
+                        & 1 & 4 & 7 & 10
+                        & 2 & 5 & 8 & 11 \\
+  \end{tabular}
+\end{table}
