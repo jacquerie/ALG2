@@ -16,15 +16,15 @@ t\). Pi\`u precisamente vogliamo risolvere il seguente
 \begin{problem*}
   Data una soglia \(t\) e uno stream \(\chi\), rispondere
   \begin{itemize}
-    \item S\`i se \(D(\chi)\ge t\),
-    \item No se \(D(\chi)<\frac{t}{2}\),
-    \item indifferentemente S\`i o No altrimenti,
+    \item ``S\`i'' se \(D(\chi)\ge t\),
+    \item ``No'' se \(D(\chi)<\frac{t}{2}\),
+    \item indifferentemente ``S\`i'' o ``No'' altrimenti,
   \end{itemize}
   con probabilit\`a maggiore di \(1 - \delta\) di essere corretto.
 \end{problem*}
 
-Supponiamo di avere una funzione hash \(h:X\rightarrow [1,t]\) ideale, tale
-cio\`e che \(\forall i\mbox{, Pr}[h(x)=i]=\frac{1}{t}\). In termini di
+Supponiamo di avere una funzione hash \(h:\chi\rightarrow [1,t]\) ideale, tale
+cio\`e che \(\forall i\mbox{, }\Pr[h(x)=i]=\frac{1}{t}\). In termini di
 questa funzione siamo quasi in grado di risolvere il precedente problema.
 Abbiamo infatti il seguente
 \begin{algorithm}
@@ -33,10 +33,10 @@ Abbiamo infatti il seguente
     \Function{NoisyCounter}{h}
     \For {each \(x_i\in X\)}
       \If {\(h(x_i) = t\)}
-        \State \Return {S\`i}
+        \State \Return {``S\`i''}
       \EndIf
     \EndFor
-    \State \Return {No}
+    \State \Return {``No''}
     \EndFunction
   \end{algorithmic}
 \end{algorithm}
@@ -50,29 +50,49 @@ Abbiamo infatti il seguente
   questa sar\`a la probabilit\`a d'errore qualora \(D(\chi)\) fosse maggiore di
   \(t\) e la probabilit\`a di successo nell'altro caso.
   \begin{itemize}
-    \item Supponiamo \(D(\chi)\ge t\). TODO
-    \item Supponiamo invece \(D(\chi)<\frac{t}{2}\). TODO
+    \item Supponiamo \(D(\chi)\ge t\). Allora la probabilit\`a di fallimento \`e
+    la probabilit\`a che \(D(\chi)\) volte la funzione hash sia diversa da \(t\),
+    il che accade con probabilit\`a \(\Pr[h(x_i)\neq t]=1-\frac{1}{t}\).
+    Dunque possiamo scrivere
+    \begin{align*}
+      \Pr[\mbox{fallimento}]&=\overbrace{\left(1-\frac{1}{t}\right)\left(1-
+      \frac{1}{t}\right)\cdots\left(1-\frac{1}{t}\right)}^{D(\chi)\mbox{ 
+      volte}} \\ &= \left(1-\frac{1}{t}\right)^{D(\chi)} \le \left(1-
+      \frac{1}{t}\right)^{t} < \frac{1}{e} \approx 0.37\text{,}
+    \end{align*}
+    di conseguenza
+    \[\Pr[\mbox{successo}]=1-\Pr[\mbox{fallimento}]\approx 0.63\text{.}\]
+    \item Supponiamo invece \(D(\chi)<\frac{t}{2}\). La probabilit\`a di successo
+    \`e ancora la probabilit\`a che \(D(\chi)\) volte la funzione hash sia diversa
+    da \(t\), dunque
+    \begin{align*}
+      \Pr[\mbox{successo}]&=\overbrace{\left(1-\frac{1}{t}\right)\left(1-\frac{1}{t}
+      \right)\cdots\left(1-\frac{1}{t}\right)}^{D(\chi)\mbox{ volte}} \\ &=
+      \left(1-\frac{1}{t}\right)^{D(\chi)}\ge \left(1-\frac{1}{t}\right)^
+      {\frac{t}{2}} > \frac{1}{\sqrt{e}}\approx 0.60\text{.}
+    \end{align*}
   \end{itemize}
+  Otteniamo quindi un algoritmo che fornisce la risposta corretta in pi\`u del
+  \(60\%\) dei casi. 
 \end{proof}
 
-Abbiamo quindi un modo per ottenere una risposta corretta in pi\`u del \(60\%\)
-dei casi. Possiamo superare qualunque soglia di confidenza semplicemente
-ripetendo abbastanza volte il precedente algoritmo e scegliendo il risultato
-ottenuto pi\`u frequentemente. Sia dunque \(H = \left\{h_j\,|\,j\in[k]\right\}\) 
-una famiglia di funzioni hash ideali e indipendenti.
+Possiamo superare qualunque soglia di confidenza semplicemente ripetendo
+abbastanza volte il precedente algoritmo e scegliendo il risultato ottenuto pi\`u
+frequentemente. Sia dunque \(H = \left\{h_j\,|\,j\in[k]\right\}\)  una famiglia
+di funzioni hash ideali e indipendenti.
 \begin{algorithm}
-  \caption{}
+  \caption{TODO}
   \begin{algorithmic}[1]
     \State {yes\_votes = 0}
     \For {each \(h_j\in H\)}
-      \If {\(\textsc{NoisyCounter}(h_j)\) = S\`i}
+      \If {\(\textsc{NoisyCounter}(h_j)\) = ``S\`i''}
         \State {yes\_votes\,++}
       \EndIf
     \EndFor
     \If {yes\_votes \(>\frac{k}{2}\)}
-      \State \Return {S\`i}
+      \State \Return {``S\`i''}
     \EndIf
-    \State \Return {No}
+    \State \Return {``No''}
   \end{algorithmic}
 \end{algorithm}
 
@@ -80,7 +100,7 @@ una famiglia di funzioni hash ideali e indipendenti.
   TODO
 \end{lemma}
 \begin{proof}
-  Sia \(Z_i\) l'indicatrice dell'evento \(\{\textsc{NoisyCounter}(h_j)=\mbox{S\`i}\}\).
+  Sia \(Z_i\) l'indicatrice dell'evento \(\{\textsc{NoisyCounter}(h_j)=\mbox{``S\`i''}\}\).
   Il precedente lemma garantisce che \(\mbox{Pr}[Z_i]\ge 0.6\). Sia allora \(Z=
   \sum_{i=1}^k{Z_i}\). Osserviamo che dalla linearit\`a della speranza segue 
   immediatamente che \(\E[Z]\ge 0.6k\). Di conseguenza abbiamo:
@@ -93,5 +113,7 @@ una famiglia di funzioni hash ideali e indipendenti.
   \[\mbox{Pr}\left[Z\le\frac{k}{2}\right]\le\exp{\left(-\frac{0.6 k\cdot{\frac{0.1}{0.6}}^2}{2}\right)}\mbox{,}\]
   perci\`o possiamo rendere arbitrariamente  piccola la probabilit\`a di rispondere
   ``No''. Di conseguenza, ragionando come nella dimostrazione del precedente lemma,
-  possiamo rendere arbitrariamente vicina a \(1\) la probabilit\`a di successo.
+  possiamo ottenere un algoritmo corretto con probabilit\`a \(1-\delta\) scegliendo
+  \(k = O\left(\log{\frac{1}{\delta}}\right)\).
 \end{proof}
+
