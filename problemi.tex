@@ -20,11 +20,7 @@
 \usepackage{amsfonts}
 
 \usepackage{tikz}
-
-% Styles used in a drawing in 04.tex
-\tikzstyle{el}=[circle,draw=black!100,fill]
-\tikzstyle{red_el}=[circle,draw=red!100,fill=red!100]
-\tikzstyle{green_el}=[circle,draw=green!100,fill=green!100]
+\usetikzlibrary{shapes.geometric,calc,backgrounds}
 
 \usepackage{algorithm}
 %\usepackage{algorithmicx}
@@ -49,6 +45,11 @@
 % Command used in 03.tex
 \newcommand{\sort}{\mbox{sort}}
 
+% Styles used in 04.tex
+\tikzstyle{el}=[circle,draw=black!100,fill]
+\tikzstyle{red_el}=[circle,draw=red!100,fill=red!100]
+\tikzstyle{green_el}=[circle,draw=green!100,fill=green!100]
+
 % Commands used in 05.tex
 \newcommand{\map}{\textsc{Map}\xspace}
 \newcommand{\reduce}{\textsc{Reduce}\xspace}
@@ -58,6 +59,10 @@
 % Commands used in 08.tex
 \newcommand{\dc}{\textsc{Dc3}\xspace}
 \newcommand{\radixsort}{\textsc{Radix Sort}\xspace}
+
+% Commands and styles used in 21.tex
+\newcommand{\maxsat}{\textsc{Max-Sat}\xspace}
+\tikzstyle{literal}=[circle,draw=black!100,fill,inner sep=0pt,minimum size=0.1cm]
 
 % Command used in 22.tex
 \newcommand{\E}{\mathbb{E}}
