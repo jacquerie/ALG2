@@ -67,9 +67,9 @@ bucket, più un lemma:
     h_2(x) = i$, si ha:
     
     \begin{align}
-        &Pr\left[(h_1(x) = i \land h_2(x) = j) \lor (h_1(x) = i \land h_2(x) = j) \right] = \nonumber \\
-        &= Pr\left[h_1(x) = i \land h_2(x) = j\right] + Pr\left[h_1(x) = j \land h_2(x) = i\right] = \nonumber \\
-        &= 2 Pr\left[h_1(x) = i\right]Pr\left[h_2(x) = j\right] = \nonumber \\
+        &\Pr\left[(h_1(x) = i \land h_2(x) = j) \lor (h_1(x) = i \land h_2(x) = j) \right] = \nonumber \\
+        &= \Pr\left[h_1(x) = i \land h_2(x) = j\right] + \Pr\left[h_1(x) = j \land h_2(x) = i\right] = \nonumber \\
+        &= 2 \Pr\left[h_1(x) = i\right]\Pr\left[h_2(x) = j\right] = \nonumber \\
         &= 2 \frac{1}{r} \frac{1}{r} = \frac{2}{r^2} \nonumber
     \end{align}
 
@@ -77,7 +77,7 @@ bucket, più un lemma:
     più n, si ha:
 
     \begin{align}
-        & Pr\left[\exists \mbox{percorso di lunghezza 1 tra $i$ e $j$}\right] \nonumber \\
+        & \Pr\left[\exists \mbox{percorso di lunghezza 1 tra $i$ e $j$}\right] \nonumber \\
         &\le n \frac{2}{r^2} = \frac{2n}{r} \frac{1}{r} \nonumber \\
         &\left\{r \ge 2cn \mbox{ per ipotesi} \Rightarrow c \le \frac{r}{2n}
             \Rightarrow \frac{1}{c} \ge \frac{2n}{r} \right\} \nonumber \\
@@ -90,14 +90,14 @@ bucket, più un lemma:
             \item Esista un arco tra $k$ e $j$.
         \end{enumerate}
         Abbiamo
-            \[Pr[(1)] = \frac{c^{1-l}}{r}\]
+            \[\Pr[(1)] = \frac{c^{1-l}}{r}\]
         per ipotesi induttiva. Inoltre, usando lo stesso ragionamento di prima
         otteniamo che
-            \[Pr[(2)]= \frac{c^{-1}}{r}.\]
+            \[\Pr[(2)]= \frac{c^{-1}}{r}.\]
 
         Notiamo che i valori possibili di k sono $r$ e che quindi la probabilità
         totale è data da:
-        \[r Pr[(1)]Pr[(2)] = r\frac{c^{-l}}{r^2} = \frac{c^{-l}}{r}\] \qed
+        \[r \Pr[(1)]\Pr[(2)] = r\frac{c^{-l}}{r^2} = \frac{c^{-l}}{r}\] \qed
     \end{itemize}
 \end{proof*}
 
@@ -105,26 +105,37 @@ La probabilità che al punto 3 dell'inserimento avvenga un reashing, è maggiora
 dalla probabilità che per qualche elemento esista un ciclo. Se notiamo che
 \emph{esiste un ciclo di lunghezza $l$}$\Leftrightarrow$\emph{esiste un percorso di
 lunghezza $l$ tra $i$ e $i$ } otteniamo:
-\begin{align}
-    &Pr\left[\exists \mbox{un ciclo per il nodo i nel grafo Cuckoo}\right] \nonumber \\
-    &= \sum_{l=1}^{\infty} Pr\left[\exists \mbox{ciclo di lunghezza $l$ nel grafo Cuckoo}\right] \nonumber \\
-    &= \sum_{l=1}^{\infty} Pr\left[\exists \mbox{percorso di lunghezza $l$ tra $i$ e $i$}\right] \nonumber \\
-    &\le \sum_{l=1}^{\infty} \frac{c^{-l}}{r} = \frac{1}{r(c-1)} \nonumber
-\end{align}
+\begin{align*}
+    &\Pr\left[\exists \mbox{un ciclo per il nodo i nel grafo Cuckoo}\right] \\
+    &= \sum_{l=1}^{\infty} \Pr\left[\exists \mbox{ciclo di lunghezza $l$ nel grafo Cuckoo}\right] \\
+    &= \sum_{l=1}^{\infty} \Pr\left[\exists \mbox{percorso di lunghezza $l$ tra $i$ e $i$}\right] \\
+    &\le \sum_{l=1}^{\infty} \frac{c^{-l}}{r} = \frac{1}{r(c-1)}
+\end{align*}
 
 da cui:
-\begin{align}
-    &Pr\left[\mbox{rehashing}\right] \nonumber \\
-    &= \sum_{i=1}^{r} Pr\left[\exists \mbox{un ciclo per il nodo i nel grafo cuckoo}\right] \nonumber \\
-    &= r*\frac{1}{r(c-1)} = \frac{1}{c-1} \nonumber
-\end{align}
+\begin{align*}
+    &\Pr\left[\exists \mbox{un ciclo nel grafo cuckoo}\right] \\ 
+    &= \sum_{i=1}^{r} \Pr\left[\exists \mbox{un ciclo per il nodo i nel grafo cuckoo}\right] \\
+    &= r*\frac{1}{r(c-1)} = \frac{1}{c-1}
+\end{align*}
 
-Ponendo $c=3$ la probabilità di un rehash è $\frac{1}{2}$, e di n rehash è
-$\frac{1}{2^n}$, quindi il numero atteso di rehash ad ogni inserimento è
+notiamo inoltre che se abbiamo esattamente n cicli, possiamo avere al più
+n rehash, quindi:
 
-\[ \sum_{i=1}^{n} i*\frac{1}{2^i} = 2. \]
+\begin{align*}
+    &\Pr\left[\exists \mbox{un ciclo nel grafo cuckoo}\right]^n
+        \Pr\left[\not\exists \mbox{nessun ciclo nel grafo cuckoo}\right] \\
+    &= \frac{1}{(c-1)^n} \frac{c-2}{c-1} = \frac{c-2}{(c-1)^{n+1}}\\
+    &\ge \Pr\left[\mbox{n rehash}\right]
+\end{align*}
 
-Il costo medio di un inserimento quindi è dato dal costo di due rehashing, 
+Ponendo $c=3$ la probabilità di un rehash è al più $\frac{1}{4}$, e di n
+rehash è al più $\frac{1}{2^{n+1}}$, quindi il numero atteso di rehash ad ogni
+inserimento è
+
+\[ \sum_{i=1}^{n} i \frac{1}{2^{i+1}} = 1. \]
+
+Il costo medio di un inserimento quindi è dato dal costo di un rehashing, 
 ognuno da $\Theta(n)$, quindi a sua volta $\Theta(n)$, mentre il costo
 ammortizzato per ogni inserimento è $O(1)$.
 
