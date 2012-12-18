@@ -2,11 +2,82 @@
 
 \begin{problem*}
   Sfruttando le caratteristiche dell'algoritmo LZ77 di Lempel e Ziv per
-  suddividere un testo in una sequenza di frasi, mostrare come utilizzare
-  LZ77 per 
+  suddividere un testo in una sequenza di frasi:
   \begin{enumerate}[(a)]
-    \item nascondere dei bit all'interno del file compresso risultante,
-    \item trovare la pi\`u lunga sottostringa che si ripete, ossia che appare almeno due volte nel testo.
+    \item mostrare come utilizzare LZ77 per nascondere dei bit all'interno 
+    del file compresso risultante senza aumentarne la dimensione (nel caso
+    in cui questo sia possibile)
+    \item utilizzare il suffix tree (per costruire LZ77) per trovare la pi\`u 
+    lunga sottostringa che si ripete, ossia che appare almeno due volte nel 
+    testo.
   \end{enumerate}
 \end{problem*}
 
+\begin{enumerate}[(a)]
+  \item TODO
+  \item Chiamiamo \emph{suffix tree} di una stringa la trie compatta dei suoi
+  suffissi. Ad esempio il suffix tree della stringa 
+  \texttt{\string"abracadabra\$\string"} \`e:
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+      \node (_) at (-3,0) [] {};
+      \node (a_) at (1,0) [] {};
+      \node (abra_) at (2,0) [] {};
+      \node (abracadabra_) at (3,0) [] {};
+      \node (acadabra_) at (4,0) [] {};
+      \node (adabra_) at (5,0) [] {};
+      \node (bra_) at (6,0) [] {};
+      \node (bracadabra_) at (7,0) [] {};
+      \node (cadabra_) at (8,0) [] {};
+      \node (dabra_) at (9,0) [] {};
+      \node (ra_) at (10,0) [] {};
+      \node (racadabra_) at (11,0) [] {};
+      
+      \node (abra) at (2.5, 1) [] {};
+      
+      \node (a) at (2.5, 3) [] {};
+      \node (bra) at (6.5, 3) [] {};
+      \node (ra) at (10.5, 3) [] {};
+      
+      \node (root) at (7.5, 7) [] {};
+      
+      \draw (abra_) -- (abra) [];
+      \draw (abracadabra_) -- (abra) [];
+      
+      \draw (a) -- (a_) [];
+      \draw (a) -- (abra) [];
+      \draw (a) -- (acadabra_) [];
+      \draw (a) -- (adabra_) [];
+      
+      \draw (bra) -- (bra_) [];
+      \draw (bra) -- (bracadabra_) [];
+      
+      \draw (ra) -- (ra_) [];
+      \draw (ra) -- (racadabra_) [];
+      
+      \draw (root) -- (_) [];
+      \draw (root) -- (a) [];
+      \draw (root) -- (bra) [];
+      \draw (root) -- (cadabra_) [];
+      \draw (root) -- (dabra_) [];
+      \draw (root) -- (ra);
+    \end{tikzpicture}
+  \end{figure}
+  
+  Chiamiamo \emph{profondit\`a} di un nodo la distanza di tale nodo dalla 
+  radice, misurata per\`o nel numero di caratteri totali delle etichette
+  del cammino dalla radice al nodo. Per esempio, nel precedente albero, la 
+  profondit\`a del figlio pi\`u a destra della radice \`e \(2\).
+  
+  Affermiamo allora che la lunghezza della massima sottostringa ripetuta \`e
+  la profondit\`a massima di un nodo interno. Infatti perché un nodo sia
+  interno \`e necessario che esistano almeno due sottostringhe i cui suffissi
+  coincidano per qualche carattere, mentre la condizione di massimalit\`a
+  garantisce che si tratti della massima sottostringa ripetuta.
+  
+  Dato il suffix tree possiamo visitare in qualche ordine i suoi vertici ed
+  annotare per ciascuno di essi la profondit\`a. Nella stessa visita possiamo 
+  mantenere il nodo interno che realizzi la profondit\`a massima per
+  restituirlo a fine visita.
+\end{enumerate}
