@@ -1,25 +1,63 @@
 \chapter{Approssimazione per MAX-SAT}
 
 \begin{problem*}
-    Per il problema MAX-SAT della soddisfacibilità di una formula 
-    booleana, si consideri il seguente algoritmo di approssimazione 
-    per massimizzare il numero di clausole soddisfatte in una data 
-    formula: Sia $F$ la formula data, $x_1 , x_2 , \dots , x_n$ le
-    variabili booleane in essa contenute, e $c_1 , c_2 , \dots c_m$
-    le sue clausole. Scegli i valori booleani casuali $b_1 , b_2 , 
-    \dots, b_n$, ossia ciascun $b_i \in \{0, 1\}~(1 \le i \le n)$. 
-    Calcola il numero $m_0$ di clausole soddisfatte dall’assegnamento 
-    tale che $x_i := b_i~ (1 \le i \le n)$. Calcola il numero $m_1$ di
-    clausole soddisfatte dall’assegnamento tale che $x_i := \bar{b_i}~
-    (1 \le i \le n)$, dove $\bar{b_i}$ indica la negazione di $b_i$. 
-    Se $m_0 > m_1$, restituisci l’assegnamento $x_i := b_i ~(1 \le i 
-    \le n)$; altrimenti, restituisci l’assegnamento $x_i := \bar{b_i} 
-    ~(1 \le i \le n)$. Dimostrare che il suddetto algoritmo è una 
-    $r$-approssimazione per MAX-SAT, indicando anche il valore di $r > 1$
-    (e motivando l’utilizzo di tale valore). Discutere se, in generale, 
-    la scelta di $b1 , b2 , \dots , bn$ possa influenzare o meno il valore 
-    di $r$, motivando le argomentazioni addotte. Facoltativo: creare 
-    un’istanza di MAX-SAT in cui il suddetto algoritmo ottiene un costo che 
-    è r volte più piccolo del costo ottimo per una data scelta dei valori 
-    di $b_1 , b_2 \dots , b_n$.
+  Per il problema \maxsat della soddisfacibilità di una formula 
+  booleana, si consideri il seguente algoritmo di approssimazione 
+  per massimizzare il numero di clausole soddisfatte in una data 
+  formula: Sia \(F\) la formula data, \(x_1, x_2,\dots,x_n\) le
+  variabili booleane in essa contenute, e \(c_1,c_2,\dots,c_m\)
+  le sue clausole. Scegli i valori booleani casuali \(b_1,b_2,\dots,b_n\), 
+  ossia ciascun \(b_i\in\{0, 1\}~(1 \le i \le n)\). Calcola il numero \(m_0\) 
+  di clausole soddisfatte dall’assegnamento tale che \(x_i := b_i~ (1 \le i 
+  \le n)\). Calcola il numero \(m_1\) di clausole soddisfatte 
+  dall’assegnamento tale che \(x_i := \overline{b_i}~(1 \le i \le n)\), dove 
+  \(\overline{b_i}\) indica la negazione di \(b_i\). Se \(m_0 > m_1\), 
+  restituisci l’assegnamento \(x_i := b_i ~(1\le i\le n)\); altrimenti, 
+  restituisci l’assegnamento \(x_i := \overline{b_i}~(1 \le i \le n)\). 
+  Dimostrare che il suddetto algoritmo è una \(r\)-approssimazione per 
+  \maxsat, indicando anche il valore di \(r < 1\) (e motivando l’utilizzo di 
+  tale valore). Discutere se, in generale, la scelta di \(b_1,b_2,\dots,b_n\) 
+  possa influenzare o meno il valore di \(r\), motivando le argomentazioni 
+  addotte. Facoltativo: creare un’istanza di \maxsat in cui il suddetto 
+  algoritmo ottiene un costo che è \(r\) volte più piccolo del costo ottimo 
+  per una data scelta dei valori di \(b_1,b_2\dots,b_n\).
 \end{problem*} 
+
+Vogliamo mostrare che \(r = \frac{1}{2}\). Senza perdita di generalit\`a
+possiamo supporre che \(F\) sia in forma normale congiuntiva, cio\`e sia
+congiunzione logica di clausole, ciascuna disgiunzione di letterali.
+Supponiamo di aver fissato un certo assegnamento \(x_i~:=~b_i~(1\le~i\le~n)\).
+Raffiguriamolo con un disegno (TODO)
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}
+    \node (x_bar_1) at (0,0) [literal,label=below:{\(\overline{x_1}\)}] {};
+    \node (x_2) at (1,0) [literal,label=below:{\(x_2\)}] {};
+    \node (x_3) at (2,0) [literal,label=below:{\(x_3\)}] {};
+    \node (x_bar_4) at (3,0) [literal,label=below:{\(\overline{x_4}\)}] {};
+    \node (x_1) at (0,1) [literal,label=above:{\(x_1\)}] {};
+    \node (x_bar_2) at (1,1) [literal,label=above:{\(\overline{x_2}\)}] {};
+    \node (x_bar_3) at (2,1) [literal,label=above:{\(\overline{x_3}\)}] {};
+    \node (x_4) at (3,1) [literal,label=above:{\(x_4\)}] {};
+    
+    \node (begin_line) at (-2, 0.5) [] {};
+    \node (end_line) at (5, 0.5) [] {};
+    
+    \draw (begin_line) -- (end_line) [thick];
+    
+    \begin{scope}[on background layer]
+      \draw ($(x_bar_2)!0.5!(x_bar_3)$) ellipse 
+            [x radius=0.9cm, y radius=0.2cm];   
+    \end{scope}
+  \end{tikzpicture}
+\end{figure}
+
+Siano \(P\) ed \(N\) il numero di clausole che giacciono rispettivamente sopra
+e sotto la linea evidenziata, e sia \(C\) il numero di quelle che la 
+attraversano. Osserviamo allora che l'algoritmo proposto soddisfa 
+\(\text{APPROX} = C+\max\{P,N\}\) clausole, e che questo \`e sicuramente 
+minore dell'ottimo OPT, a propria volta minore di \(C+P+N\). Inoltre 
+\(C+\max\{P,N\}\) \`e maggiore di \(C+\frac{P+N}{2}\), che \`e maggiore di 
+\(\frac{\text{OPT}}{2}\). Mettendo insieme le disugaglianze fin qui scritte 
+abbiamo: \[\frac{\text{OPT}}{2}\le C+\frac{P+N}{2}\le\text{APPROX}\le
+\text{OPT}\le C+P+N\text{,}\]

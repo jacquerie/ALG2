@@ -6,13 +6,12 @@
   Array di un testo che abbia la stessa complessit\`a del \mergesort in EMM.
 \end{problem*}
 
-Diamo di seguito un esempio di applicazione dell'algoritmo \dc alla stringa
-\texttt{\string"abracadabra\string"}. Per ragioni tecniche aggiungiamo tre 
-caratteri speciali \texttt{\$} in fondo alla stringa, ottenendo 
-\texttt{\string"abracadabra\$\$\$\string"}. Scandiamo la stringa e sostituiamo 
-ogni carattere con il proprio rango nell'ordine alfabetico dei caratteri della 
-stringa stessa, con la convenzione che il carattere \texttt{\$} precede ogni altro 
-carattere. Otteniamo dunque:
+Applichiamo l'algoritmo \dc alla stringa \texttt{\string"abracadabra\string"}. 
+Per ragioni tecniche aggiungiamo tre caratteri speciali \texttt{\$} in fondo alla 
+stringa, ottenendo \texttt{\string"abracadabra\$\$\$\string"}. Scandiamo la 
+stringa e sostituiamo ogni carattere con il proprio rango nell'ordine alfabetico 
+dei caratteri della stringa stessa, con la convenzione che il carattere 
+\texttt{\$} precede ogni altro carattere. Otteniamo dunque:
 \begin{table}[H]
   \begin{tabularx}{\linewidth}{l*{14}{X}}
     Carattere              & \texttt{a} & \texttt{b} & \texttt{r} & \texttt{a}
@@ -137,8 +136,8 @@ Abbiamo dunque:
     Indice provv. nel SA & \multicolumn{4}{c}{\cellcolor{gray!25}}
                         & \textbf{5} & \textbf{6} & \textbf{2} & \textbf{1}
                         & \multicolumn{3}{c}{\cellcolor{gray!25}} \\
-    Coppie associate    & (\texttt{a},\textbf{5}) & (\texttt{a},\textbf{6})
-                        & (\texttt{d},\textbf{2}) & (\texttt{r},\textbf{1})
+    Coppia associata    & \texttt{a},\textbf{5} & \texttt{a},\textbf{6}
+                        & \texttt{d},\textbf{2} & \texttt{r},\textbf{1}
                         & \multicolumn{4}{c}{\cellcolor{gray!25}}
                         & \multicolumn{3}{c}{\cellcolor{gray!25}} \\
 
@@ -196,12 +195,12 @@ successivo e l'indice provvisorio nel Suffix Array del carattere di indice
                         & \textbf{5} & \textbf{6} & \textbf{2} & \textbf{1}
                         & \textbf{7} & \textbf{3} & \textbf{4} \\
 
-    Coppie associata    & \texttt{a},\textbf{5} & \texttt{a},\textbf{6}
+    Coppia associata    & \texttt{a},\textbf{5} & \texttt{a},\textbf{6}
                         & \texttt{d},\textbf{2} & \texttt{r},\textbf{1}
                         & \texttt{b},\textbf{7} & \texttt{c},\textbf{3}
                         & \texttt{a},\textbf{4} & \texttt{a},\textbf{0}
                         & \multicolumn{3}{c}{\cellcolor{gray!25}} \\
-    Triple associata    & \texttt{a},\texttt{b},\textbf{7}
+    Tripla associata    & \texttt{a},\texttt{b},\textbf{7}
                         & \texttt{a},\texttt{c},\textbf{3}
                         & \texttt{d},\texttt{a},\textbf{4} 
                         & \texttt{r},\texttt{a},\textbf{0}
@@ -231,6 +230,7 @@ l'ordine lessicografico sulle triple associate per confrontare elementi dei grup
                            & 6 & 10 & 1 \\
   \end{tabularx}
 \end{table}
-pertanto il Suffix Array di \texttt{\string"abracadabra\string"} \`e 
+Pertanto, riordinando le colonne secondo i valori della terza riga e leggendo i
+valori della terza, il Suffix Array di \texttt{\string"abracadabra\string"} \`e 
 \([\mathbf{10},\mathbf{7},\mathbf{0},\mathbf{3},\mathbf{5},\mathbf{8},\mathbf{1},
 \mathbf{4},\mathbf{6},\mathbf{9},\mathbf{2}]\).
