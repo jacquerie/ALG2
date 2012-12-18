@@ -6,45 +6,51 @@
   di bit utilizzati per codici prefix free dei simboli.
 \end{problem*}
 
-Dato un testo, costruiamo il codice di Huffman come segue
-
+Dato un testo, costruiamo il codice di Huffman come segue:
 \begin{algorithm}
     \caption{Algoritmo per la costruzione del prefix tree del codice di Huffman}
     \begin{algorithmic}[1]
-        \State scorro la stringa mantenendo tante triple della forma $<p, t>$ per ogni carattere $c$, dove $c$ rappresenta il carattere, $p$ la probabilità empirica per $c$ e $t$ è l'albero associato al carattere (in questo caso una foglia contenente come valore $c$).
-        \While {ci sono triple}
-            \State prendo le due triple $<p1, t1>$, $<p2, t2>$ con minor valore di $p$
-            \State creo la nuova tripla $<p', t'>$
-            \State $p' \gets p1 + p2$
-            \State $t'.left \gets t1$
-            \State $t'.right \gets t2$
+        \State scorro la stringa mantenendo tante triple della forma \(\langle p,
+        t\rangle\) per ogni carattere \(c\), dove \(c\) rappresenta il carattere,
+        \(p\) la probabilità empirica per \(c\) e \(t\) è l'albero associato al
+        carattere (in questo caso una foglia contenente come valore \(c\)).
+        \While {ci sono almeno due triple}
+            \State prendo le due triple \(\langle p_1, t_1\rangle\), \(\langle
+            p_2, t_2\rangle\) con minor valore di \(p\)
+            \State p' \(\gets \text{p}_1 + \text{p}_2\)
+            \State t'.left \(\gets \text{t}_1\)
+            \State t'.right \(\gets \text{t}_2\)
+            \State creo la nuova tripla \(\langle p', t'\rangle\)
         \EndWhile
     \end{algorithmic}
 \end{algorithm}
 
-Per ottenere i codici associati ai caratteri è sufficiente visitare l'albero, associando ad una ricorsione sul figlio sinistro l'inserimento nel codice di un bit 0 e 1 nel caso del figlio destro, o viceversa.
+Per ottenere i codici associati ai caratteri è sufficiente visitare l'albero,
+associando ad una ricorsione sul figlio sinistro l'inserimento nel codice di un
+bit \texttt{0} e \texttt{1} nel caso del figlio destro, o viceversa.
 
-Si nota che le righe 6 e 7 potevano tranquillamente avere i valori invertiti, in quanto non cambierebbe né la lunghezza dei codici ottenuti, né la proprietà di prefix free, in quanto i valori codificati restano sempre sulle foglie.
+Osserviamo che le righe \(6\) e \(7\) potevano tranquillamente avere i valori
+invertiti, in quanto non cambierebbe n\'e la lunghezza dei codici ottenuti,
+n\'e la proprietà di prefix free, in quanto i valori codificati restano sempre
+sulle foglie.
 
 \begin{lemma}[Ottimalità]
-Sia $H$ l'albero ottenuto con l'algoritmo precedente, e sia $T$ un qualunque altro albero con la stessa struttura ma con le foglie permutate. Vale
+Sia \(H\) l'albero ottenuto con l'algoritmo precedente, e sia \(T\) un qualunque altro albero con la stessa struttura ma con le foglie permutate. Allora abbiamo:
 \[
-    P(H) \le P(T), \mbox{con } P(X) = \sum_{c \in \Sigma} l_{X, c} \, p_c
+    P(H) \le P(T), \mbox{con } P(X) = \sum_{c \in \Sigma} \ell_{X, c} \, p_c\text{.}
 \]
 \end{lemma}
 
-\begin{proof*}
-È sufficiente mostrare che scambiando due foglie in $H$ otteniamo un valore più grande di $P(H)$.
-
-Siano $l_a, p_a, l_b, p_b$ lunghezza e probabilità associate a due caratteri $a$ e $b$, vogliamo
-dimostrare $l_a p_a + l_b p_b \le l_a p_b + l_b p_a$.
-
-\begin{align*}
-    & l_a p_a + l_b p_b \le l_a p_b + l_b p_a \\
-    & (l_a - l_b) p_a + (l_b - l_a) p_b \le 0 \\
-    & (l_a - l_b) p_a - (l_a - l_b) p_b \le 0 \\
-    & (l_a - l_b)(p_a - p_b) \le 0
-\end{align*}
-
-che è sempre vero perché $p_a \le p_b \Rightarrow l_b \le l_a$. \qed
-\end{proof*}
+\begin{proof}
+  È sufficiente mostrare che scambiando due foglie in \(H\) otteniamo un valore
+  più grande di \(P(H)\). Siano \(\ell_a, p_a, \ell_b, p_b\) lunghezza e
+  probabilità associate a due caratteri \(a\) e \(b\), vogliamo dimostrare 
+  \(\ell_a p_a + \ell_b p_b \le \ell_a p_b + \ell_b p_a\). Ma infatti abbiamo:
+  \begin{align*}
+    & \ell_a p_a + \ell_b p_b \le \ell_a p_b + \ell_b p_a \\
+    & (\ell_a - \ell_b) p_a + (\ell_b - \ell_a) p_b \le 0 \\
+    & (\ell_a - \ell_b) p_a - (\ell_a - \ell_b) p_b \le 0 \\
+    & (\ell_a - \ell_b)(p_a - p_b) \le 0\text{,}
+  \end{align*}
+  che è sempre vero perché \(p_a \le p_b \Rightarrow \ell_b \le \ell_a\).
+\end{proof}

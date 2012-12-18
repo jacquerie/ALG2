@@ -59,7 +59,7 @@ bucket, più un lemma:
     decresce esponenzialmente.
 \end{lemma}
 
-\begin{proof*}
+\begin{proof}
     Procediamo per induzione sulla lunghezza del percorso:
     \begin{itemize}
     \item per $l = 1$: un percorso di lunghezza 1 tra due nodi $i$ e $j$ esiste
@@ -97,9 +97,9 @@ bucket, più un lemma:
 
         Notiamo che i valori possibili di k sono $r$ e che quindi la probabilità
         totale è data da:
-        \[r \Pr[(1)]\Pr[(2)] = r\frac{c^{-l}}{r^2} = \frac{c^{-l}}{r}\] \qed
+        \[r \Pr[(1)]\Pr[(2)] = r\frac{c^{-l}}{r^2} = \frac{c^{-l}}{r}\]
     \end{itemize}
-\end{proof*}
+\end{proof}
 
 La probabilità che al punto 3 dell'inserimento avvenga un reashing, è maggiorata
 dalla probabilità che per qualche elemento esista un ciclo. Se notiamo che
