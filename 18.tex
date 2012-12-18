@@ -1,23 +1,44 @@
 \chapter{Applicazioni di LZ77}
 
 \begin{problem*}
-  Sfruttando le caratteristiche dell'algoritmo LZ77 di Lempel e Ziv per
+  Sfruttando le caratteristiche dell'algoritmo \LZuno di Lempel e Ziv per
   suddividere un testo in una sequenza di frasi:
   \begin{enumerate}[(a)]
-    \item mostrare come utilizzare LZ77 per nascondere dei bit all'interno 
+    \item mostrare come utilizzare \LZuno per nascondere dei bit all'interno 
     del file compresso risultante senza aumentarne la dimensione (nel caso
     in cui questo sia possibile)
-    \item utilizzare il suffix tree (per costruire LZ77) per trovare la pi\`u 
+    \item utilizzare il suffix tree (per costruire \LZuno) per trovare la pi\`u 
     lunga sottostringa che si ripete, ossia che appare almeno due volte nel 
     testo.
   \end{enumerate}
 \end{problem*}
 
 \begin{enumerate}[(a)]
-  \item TODO
+  \item Nel corso della compressione di un file con l'algoritmo \LZuno pu\`o
+  capitare che sia possibile scegliere fra pi\`u prefissi identici a posizioni
+  diverse. La scelta di un prefisso al posto di un altro genera qualche bit
+  di informazione, che pu\`o essere usato per codificare un messaggio segreto.
+  Supponiamo che Alice voglia inviare un messaggio nascosto a Bob tramite la
+  compressione della stringa \texttt{\string"abracadabra\$\string"}.
+  Raffiguriamo in tabella i primi passi dell'esecuzione dell'algoritmo:
+  \begin{table}[H]
+    \centering
+    \begin{tabularx}{5cm}{*{3}{X}}
+      \texttt{a} & \(\rightarrow\) & (\textbf{0},\textbf{0},\textbf{a})\ \\
+      \texttt{b} & \(\rightarrow\) & (\textbf{0},\textbf{0},\textbf{b})\ \\
+      \texttt{r} & \(\rightarrow\) & (\textbf{0},\textbf{0},\textbf{r})\ \\
+      \texttt{a} & \(\rightarrow\) & (\textbf{3},\textbf{1},\textbf{c})\ \\
+    \end{tabularx}
+  \end{table}
+  
+  Per comprimere la successiva \texttt{a} Alice potrebbe scegliere di tornare
+  indietro di \(5\) caratteri oppure di \(2\). La scelta di una delle due
+  alternative comporta un bit di informazione, che Bob pu\`o ricostruire in
+  fase di decodifica.
+
   \item Chiamiamo \emph{suffix tree} di una stringa la trie compatta dei suoi
   suffissi. Ad esempio il suffix tree della stringa 
-  \texttt{\string"abracadabra\$\string"} \`e:
+  \texttt{\string"abracadabra\$\string"} \`e: (TODO)
   \begin{figure}[H]
     \centering
     \begin{tikzpicture}
