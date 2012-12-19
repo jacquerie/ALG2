@@ -35,7 +35,7 @@ lineare, nel secondo la correttezza dell'algoritmo.
 \begin{lemma}[Costo]
     L'algoritmo compie \(O(n)\) I/O.
 \end{lemma}
-\begin{proof*}
+\begin{proof}
     La prima riga dell'algoritmo comporta soltanto di scandire tutti gli
     elementi: l'ordinamento di ogni run viene infatti svolto in memoria
     principale, e non comporta ulteriori I/O. Anche la seconda riga
@@ -50,13 +50,13 @@ lineare, nel secondo la correttezza dell'algoritmo.
     dove la prima eguaglianza discende dal fatto che, avendo selezionato
     un elemento ogni \(\frac{\sqrt{m}}{4}\), la cardinalit\`a di \(G\) \`e
     \(\frac{4N}{\sqrt{m}}\). Ogni riga contribuisce quindi \(O(n)\) I/O, da cui la tesi.
-\end{proof*}
+\end{proof}
 
 \begin{lemma}[Correttezza]
     Il numero di elementi di \(S\) compresi fra due elementi di \(R\) \`e
     minore di \(\frac{3}{2}\frac{N}{\sqrt{m}}\).
 \end{lemma}
-\begin{proof*}
+\begin{proof}
     Vogliamo dunque stimare il numero di elementi di \(S\) compresi fra
     due generici elementi rossi \(r_1\) e \(r_2\). Possiamo dividerli in
     tre categorie:
@@ -204,4 +204,4 @@ lineare, nel secondo la correttezza dell'algoritmo.
         &= \frac{3}{2}\frac{N}{\sqrt{m}} \nonumber
     \end{align}
     essendo \(n = \frac{N}{B}\), da cui la tesi.
-\end{proof*}
+\end{proof}
