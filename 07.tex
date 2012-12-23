@@ -1,11 +1,20 @@
 \chapter{Layout di alberi binari}
 
 \begin{problem*}
-    Proporre una paginazione di  un generico albero binario in blocchi di
-    dimensione \(B\) per ottenere un layout in memoria esterna in cui un
-    cammino radice-foglia attraversi \(O(h\log{B})\) pagine, dove \(h\) \`e 
-    l'altezza dell'albero. Opzionale: per chi vuole, esiste una versione pi\`u  
-    impegnativa di questo esercizio dove un cammino radice-nodo di lunghezza
-    \(l\) attraversa \(O(\frac{l}{\log{B}})\) pagine; contattarmi per discutere
-    questa opzione.
+  Riportare tutti i passaggi dell'analisi della paginazione descritta nella
+  tesi di David Clark (reperibile nella pagina del corso) per un generico
+  albero binario in blocchi di dimensioni \(B\). Opzionale: per chi vuole,
+  esiste una versione pi\`u impegnativa di questo esercizio dove occorre
+  analizzare una paginazione in cui un cammino radice-nodo di lunghezza \(\ell
+  \) attraversa \(O(\ell\,/\log{B})\) pagine; contattarmi per discutere questa
+  opzione.
 \end{problem*}
+
+Sia \(T\) un albero binario di altezza \(H\) su \(n\) nodi. Vogliamo 
+partizionare i vertici in sottoinsiemi (detti \emph{pagine}) in modo che:
+\begin{enumerate}
+  \item Ogni pagina sia una componente connessa dell'albero contenente al 
+  pi\`u \(B\) nodi interni.
+  \item Sia minimo il numero massimo di pagine attraversate in un cammino
+  dalla radice ad una foglia.
+\end{enumerate}
