@@ -1,30 +1,76 @@
 \chapter{Ordinamento in memoria esterna}
 
 \begin{problem*}
-    Nel modello EMM (external memory model), mostrate come implementare il
-    \(k\)-way merge, ossia la fusione di \(n\) sequenze individualmente
-    ordinate e di lunghezza totale \(N\), con costo I/O di \(O(\frac{N}{B})\)
-    dove \(B\) \`e la dimensione del blocco. Minimizzare e valutare il costo
-    di CPU. Analizzare il costo del merge (I/O complexity, CPU complexity)
-    che utilizza tale \(k\)-way merge.
+    Mostrare come implementare il \kwaymerge in EMM, ossia la fusione di
+    \(n\) sequenze individualmente ordinate e di lunghezza totale \(N\), con
+    costo I/O di \(O\left(\frac{N}{B}\right)\), dove \(B\) \`e la dimensione 
+    del blocco. Minimizzare e valutare il costo di CPU. Analizzare il costo 
+    del \mergesort (I/O complexity, CPU complexity) che utilizza tale 
+    \kwaymerge.
 \end{problem*}
-Date $k$ sequenze individualmente ordinate, il $k$-way merge mantiene in memoria principale $k$ buffer di input e un buffer di output, tutti di dimensione $B$. 
-\begin{algorithm}
-\caption{$k$-way merge in memoria esterna}
-\begin{algorithmic}[1]
-\State Inizializza ciascun buffer di input a contenere il primo blocco della corrispondente run. Marca quel buffer come attivo.
-\State Tra gli elementi ancora "inutilizzati" dei buffer di input, trova il più piccolo.
-\State Sposta tale elemento nella prima posizione libera del buffer di output.
-\State Se il buffer di output risulta pieno, svuotalo in memoria esterna e reinizializzalo.
-\State Se il buffer di input da cui ho prelevato l'elemento è giunto alla fine, leggi il prossimo blocco della run corrispondente. Se anche la run è terminata, marca quel buffer come inattivo. Se il numero di buffer ancora attivi è $>1$, torna al punto 2.
-\State Quando resta un solo buffer attivo, corrispondente a un'unica run attiva, copia quest'ultima in memoria esterna.
-\end{algorithmic}	
-\end{algorithm}
-\newline
-Il costo, in termini di operazioni di $I/O$, è chiaramente $O(\frac{N}{B})$; l'algoritmo ovviamente richiede che in memoria principale ci sia abbastanza spazio per tutte le run, ossia $k \le \frac{M}{B} - 1$.\newline
-Il costo di $CPU$ dipende interamente dal passo $2$ dell'algoritmo. Usando una selezione lineare per trovare il minimo si pagherebbe $O(k)$ ad ogni iterazione, per un totale di $O(k\cdot N)$; è preferibile allora usare una heap di minimo, con inserimento ed estrazione in tempo logaritmico. Così facendo ogni iterazione viene a costare $O(\log k)$, per un costo di CPU totale di $O(N\log k)$.
-\[\]
-Il $k$-way merge-sort prevede che ciascuna run abbia dimensione $M$, in modo che possa essere interamente ordinata in memoria principale: questo porta a scegliere $k=\left\lceil\frac{N}{M}\right\rceil$. Ovviamente questo è possibile solo se \[\left\lceil\frac{N}{M}\right\rceil + 1 \le \frac{M}{B},\] il che, dati i valori attualmente comuni per $M$ e $B$, risulta verificato per file di dimensioni fino a qualche TeraByte.\newline
-Per quanto riguarda gli I/O, ciascun elemento è interessato da due operazioni di input (una per l'ordinamento della run corrispondente, una per il $k$-way merge) e due di output (quando la run ordinata viene scritta in memoria esterna, e quando il buffer di output del $k$-way merge viene svuotato), il che porta ad un costo in termini di I/O di \[O\left(\frac{N}{B}\right).\] \newline
-Il costo di CPU è dato da $\frac{N}{M}$ ordinamenti di run, dal costo $O(M \log M)$ ciascuno\footnote{Non riesco a usare mergesort a causa delle sue richieste di memoria, dunque usando quicksort (in versione eventualmente randomizzata) ottengo un costo \textit{al caso medio} di $O(M \log M)$, mentre il caso pessimo risulta ovviamente quadratico}, a cui va sommato il costo del $k$-way merge, che è $O(N\log\frac{N}{M})$. In totale si ottiene un costo medio CPU di \[O\left(N\log M + N\log\frac{N}{M}\right) = O\left(\max\left\{N\log M, N\log\frac{N}{M}\right\}\right),\]che al caso pessimo può risultare $\displaystyle O\left(\max\left\{NM, N\log\frac{N}{M}\right\}\right)$.
 
+Date \(k\) sequenze individualmente ordinate, dette \emph{run}, il \kwaymerge 
+mantiene in memoria principale \(k\) buffer di input e un buffer di 
+output, tutti di dimensione \(B\). A ogni passo seleziona fra i buffer di 
+input attivi l'elemento pi\`u piccolo e lo sposta nel buffer di output; 
+quando questo risulta pieno il suo contenuto viene copiato in memoria 
+esterna. Ogni volta che un buffer di input \`e arrivato al termine 
+l'algoritmo copia un nuovo blocco dal corrispondente run; se questo non \`e 
+pi\`u possibile il buffer viene marcato come inattivo e non viene pi\`u 
+considerato nella selezione dell'elemento pi\`u piccolo. Quando infine rimane 
+un solo run attivo viene copiato il suo contenuto in memoria esterna.
+
+\begin{algorithm}
+  \caption{\kwaymerge in EMM}
+  \begin{algorithmic}[1]
+    \State Inizializza \(k\) buffer di input contenenti ciascuno il primo 
+    blocco del corrispondente run e marca ogni buffer come attivo
+    \While{ci sono almeno due buffer di input attivi}
+      \State trova il pi\`u piccolo degli elementi ancora inutilizzati nei 
+      buffer attivi
+      \State sposta tale elemento nella prima posizione libera del buffer di 
+      output
+      \If{il buffer di output risulta pieno}
+        \State svuotalo in memoria esterna e reinizializzalo
+      \EndIf
+      \If{il buffer di input da cui ho prelevato l'elemento è giunto alla 
+      fine}
+        \State copia in tale buffer il prossimo blocco del run corrispondente
+        \If {il run \`e terminato}
+          \State marca quel buffer come inattivo
+        \EndIf
+      \EndIf
+    \EndWhile
+    \State copia l'ultimo run attivo in memoria esterna.
+  \end{algorithmic}	
+\end{algorithm}
+
+Osserviamo facilmente che il costo in termini di I/O del precedente algoritmo
+è \(O\left(\frac{N}{B}\right)\), infatti ciascun elemento \`e coinvolto in 
+\(O\left(1\right)\) trasferimenti fra memoria principale e secondaria: uno 
+quando entra in un buffer di input e uno quando esce dal buffer di output.
+
+\`E pi\`u delicato valutare il costo in CPU: se infatti al passo \(3\)
+troviamo ripetutamente il minimo con una scansione lineare dei primi elementi
+di ogni buffer, paghiamo a ogni passo \(O(k)\) confronti, per un costo totale
+di \(O(Nk)\). Mantenendo invece un \minheap dei primi \(k\) elementi 
+paghiamo a ogni passo costo logaritmico, per un costo totale in CPU di 
+\(O(N\log_{2}{k})\).
+
+Osserviamo inoltre che abbiamo tacitamente supposto che la memoria principale 
+sia abbastanza grande da contenere \(k+1\) blocchi, ossia \(k \le \frac{M}{B} 
+- 1\). Ci\`o \`e rilevante nell'analisi del \mergesort: infatti il caso base 
+di questo algoritmo consiste in \(\left\lceil\frac{N}{M}\right\rceil\)
+run ordinati grandi quanto la memoria principale. Se questi sono meno di 
+\(\frac{M}{B} - 1\) allora basta eseguire una sola volta il \kwaymerge
+per ottenere l'ordinamento in memoria esterna.
+
+Se invece cos\`i non fosse dobbiamo eseguire pi\`u volte il \kwaymerge.
+A ogni esecuzione il numero di run si riduce di un fattore \(k\), dunque
+viene eseguito \(\log_{\frac{M}{B}}{\frac{N}{M}}\) volte. Di conseguenza il 
+\mergesort che fa uso del \kwaymerge ha un costo di
+\[O\left(\frac{N}{B}\log_{\frac{M}{B}}{\frac{N}{M}}\right) = 
+O\left(\frac{N}{B}\log_{\frac{M}{B}}{\left(\frac{N}{M}\cdot\frac{M}{B}\right)}
+\right) = O\left(n\log_{m}{n}\right)\mbox{ I/O,}\] che sappiamo essere ottimo.
+
+TODO
