@@ -8,12 +8,15 @@
 Vogliamo esibire un algoritmo che selezioni un certo numero di pivot da un
 insieme \(S\) di cardinalit\`a \(N\) in modo tale che la distanza fra pivot
 consecutivi sia piccola. Il nostro scopo sar\`a usare questo algoritmo per
-costruire un analogo del \quicksort in memoria esterna, cos\`i come la \(k\)
+costruire un analogo del \distributionsort in memoria esterna, così come la \(k\)
 -way merge ci ha permesso di costruire l'algoritmo di \mergesort in 
 memoria esterna.
 
 Ci potremmo aspettare di dover trovare \(m\) pivot, in analogia a quanto
-facciamo per la Merge. In realt\`a \`e sufficiente determinarne \(\sqrt{m}\).
+facciamo per la Merge, per poter suddividere i bucket in memoria in modo analogo
+a quanto facevamo con la merge, tenendo k blocchi corrispondenti ai bucket, più uno
+in input. In realt\`a \`e sufficiente determinarne \(\sqrt{m}\), in quanto il costo
+totale del \distributionsort di fatto aumenta di un fattore moltiplicativo costante (2).
 Diamo di seguito l'algoritmo e due lemmi. Nel primo dimostreremo il costo
 lineare, nel secondo la correttezza dell'algoritmo.
 

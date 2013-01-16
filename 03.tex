@@ -8,14 +8,14 @@
 \end{problem*}
 
 Dall'analisi svolta sul Lower Bound della permutazione, sappiamo che il costo di
-I/O è dato da \(\min\{n, \sort(n)\}\), dove \(\sort(n) =
-O\left(\frac{N}{B}log_\frac{N}{M} \frac{N}{B}\right)\).
+I/O è dato da \(\min\{N, \sort(n)\}\), dove \(\sort(n) =
+O\left(\frac{N}{B}log_\frac{M}{B} \frac{N}{B}\right)\).
  
 \begin{algorithm}
     \caption{Permutazione in memoria esterna}
     \begin{algorithmic}[1]
-        \State Calcola il minimo fra \(\{n, \sort(n)\}\)
-        \State Se il minimo è \(n\) si utilizza un algoritmo banale che semplicemente esegue un'iterazione sugli elementi e scrive la permutazione.
+        \State Calcola il minimo fra \(\{N, \sort(n)\}\)
+        \State Se il minimo è \(N\) si utilizza un algoritmo banale che semplicemente esegue un'iterazione sugli elementi e scrive la permutazione.
         \State Nel caso opposto invece si utilizza tecnica \mapreduce.
     \end{algorithmic}	
 \end{algorithm}
@@ -42,14 +42,15 @@ Analizziamo il costo dei singoli passi dell'algoritmo:
     \(O\left(\frac{N}{B}\right)\).
     \item Il costo di I/O del \emph{secondo} passo è uguale a quello di un
     ordinamento che, utilizzando ad esempio il \(k\)-way merge-sort è
-    \(O\left(\frac{N}{B}log_\frac{N}{M} \frac{N}{B}\right)\).
+    \(O\left(\frac{N}{B}log_\frac{M}{B} \frac{N}{B}\right)\).
     \item Nel \emph{terzo} passo, poiché le coppie sono ordinate per \(C[i]\), si accede
     al vettore \(A\) in modo sequenziale, quindi il costo di I/O è \(O\left(\frac{N}{B}\right)\).
     \item Anche per il \emph{quarto} il costo di I/O è
-    \(O\left(\frac{N}{B}log_\frac{N}{M} \frac{N}{B}\right)\).
+    \(O\left(\frac{N}{B}log_\frac{M}{B} \frac{N}{B}\right)\).
     \item Per l'\emph{ultimo} passo il costo di I/O è \(O\left(\frac{N}{B}\right)\) in quanto
     sono letti e scritti \(N\) sequenzialmente.
 \end{itemize}
 
 In conclusione il costo di I/O dell'algoritmo appena esposto è
-\(O\left(\frac{N}{B}log_\frac{N}{M} \frac{N}{B}\right)\).
+\(O\left(\frac{N}{B}log_\frac{M}{B} \frac{N}{B}\right)\), l'algoritmo
+è quindi ottimo.
